@@ -1,50 +1,65 @@
-# Welcome to your Expo app 👋
+# Twogether
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Twogether is an iOS-focused app for couples who want to schedule and protect shared phone-free time.
 
-## Get started
+The product combines relationship-oriented scheduling with a native Screen Time boundary layer, pairing flows, and subscription-ready mobile infrastructure.
 
-1. Install dependencies
+## Highlights
 
-   ```bash
-   npm install
-   ```
+- Couples-focused onboarding and pairing flows
+- Shared session scheduling and history views
+- Native Screen Time / Family Controls integration boundary for iOS
+- Subscription infrastructure through RevenueCat
+- Auth-ready architecture with app-owned and provider-based entry points
 
-2. Start the app
+## Tech Stack
 
-   ```bash
-   npx expo start
-   ```
+- Expo
+- React Native
+- TypeScript
+- Expo Router
+- Zustand
+- TanStack Query
+- RevenueCat
+- Supabase
+- Swift native module support
 
-In the output, you'll find options to open the app in a
+## Repository Structure
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- `app/` - Expo Router screens
+- `src/` - shared UI, state, and client logic
+- `modules/expo-twogether-shield/` - local Expo module for Screen Time APIs
+- `plugins/withTwogetherIOS.ts` - custom iOS config plugin
+- `server/` - local auth server used during development
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Local Development
 
-## Get a fresh project
-
-When you're ready, run:
+Use Node 20.19.4 or newer.
 
 ```bash
-npm run reset-project
+npm install
+npm run start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+For the iOS development build flow:
 
-## Learn more
+```bash
+npm run prebuild:ios
+npm run ios
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+If you are also running the development auth server:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+cd server
+npm install
+npm run dev
+```
 
-## Join the community
+## Environment Notes
 
-Join our community of developers creating universal apps.
+This app expects local configuration for Supabase, RevenueCat, auth, and provider sign-in values. Keep all credentials and project-specific values in environment files only.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Product Focus
+
+Twogether is built around one specific outcome: helping couples create protected time together with less distraction and more consistency.

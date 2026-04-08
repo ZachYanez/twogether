@@ -1,53 +1,85 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const palette = {
+  white: '#FFFFFF',
+  silver: '#8E8E93',
+  gray3: '#48484A',
+  gray4: '#3A3A3C',
+  gray5: '#2C2C2E',
+  gray6: '#1C1C1E',
+  black: '#000000',
+  separator: 'rgba(84, 84, 88, 0.65)',
+  separatorLight: 'rgba(84, 84, 88, 0.35)',
+  success: '#34C759',
+  warning: '#FF9F0A',
+  danger: '#FF453A',
+};
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: palette.white,
+    textSecondary: palette.silver,
+    textTertiary: palette.gray3,
+    background: palette.black,
+    surface: palette.gray6,
+    surfaceElevated: palette.gray5,
+    accent: palette.white,
+    tint: palette.white,
+    icon: palette.silver,
+    tabIconDefault: palette.gray3,
+    tabIconSelected: palette.white,
+    card: palette.gray6,
+    border: palette.separatorLight,
+    separator: palette.separator,
+    success: palette.success,
+    warning: palette.warning,
+    danger: palette.danger,
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    text: palette.white,
+    textSecondary: palette.silver,
+    textTertiary: palette.gray3,
+    background: palette.black,
+    surface: palette.gray6,
+    surfaceElevated: palette.gray5,
+    accent: palette.white,
+    tint: palette.white,
+    icon: palette.silver,
+    tabIconDefault: palette.gray3,
+    tabIconSelected: palette.white,
+    card: palette.gray6,
+    border: palette.separatorLight,
+    separator: palette.separator,
+    success: palette.success,
+    warning: palette.warning,
+    danger: palette.danger,
   },
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
+    display: 'System',
+    body: 'System',
+    bodyMedium: 'System',
+    serif: 'New York',
+    sans: 'System',
+    rounded: 'System',
+    mono: 'Menlo',
   },
   default: {
-    sans: 'normal',
+    display: 'sans-serif',
+    body: 'sans-serif',
+    bodyMedium: 'sans-serif-medium',
     serif: 'serif',
-    rounded: 'normal',
+    sans: 'sans-serif',
+    rounded: 'sans-serif-medium',
     mono: 'monospace',
   },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
 });
+
+export const Layout = {
+  radiusLg: 16,
+  radiusMd: 12,
+  radiusSm: 8,
+  gutter: 20,
+};
