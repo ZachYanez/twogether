@@ -7,6 +7,7 @@ import { GlassCard } from '@/src/components/glass-card';
 import { ScreenShell } from '@/src/components/screen-shell';
 import { SessionCard } from '@/src/components/session-card';
 import { fetchHistoryFeed } from '@/src/lib/mock-api';
+import { computeHistorySummary } from '@/src/lib/session-templates';
 import { useTwogetherStore } from '@/src/store/twogether-store';
 
 export default function HistoryScreen() {
@@ -15,6 +16,7 @@ export default function HistoryScreen() {
   const sessions = useTwogetherStore((s) => s.sessions);
   const revision = useTwogetherStore((s) => s.revision);
   const streak = useTwogetherStore((s) => s.streak);
+  const summary = computeHistorySummary(sessions);
 
   const { data: feed = [] } = useQuery({
     queryKey: ['history', revision, deferredSearch],
@@ -35,6 +37,21 @@ export default function HistoryScreen() {
         <View style={styles.stat}>
           <Text style={styles.statValue}>{streak.totalCompleted}</Text>
           <Text style={styles.statLabel}>All time</Text>
+        </View>
+      </GlassCard>
+
+      <GlassCard style={styles.stats}>
+        <View style={styles.stat}>
+          <Text style={styles.statValue}>{summary.completedThisWeek}</Text>
+          <Text style={styles.statLabel}>This week</Text>
+        </View>
+        <View style={styles.stat}>
+          <Text style={styles.statValue}>{summary.shortSessionsCompleted}</Text>
+          <Text style={styles.statLabel}>Short wins</Text>
+        </View>
+        <View style={styles.stat}>
+          <Text style={styles.statValue}>{summary.bypassCount}</Text>
+          <Text style={styles.statLabel}>Bypasses</Text>
         </View>
       </GlassCard>
 

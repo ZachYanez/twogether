@@ -16,6 +16,10 @@ export function SessionCard({ session }: { session: Session }) {
             <View style={styles.copy}>
               <Text style={styles.title}>{session.title}</Text>
               <Text style={styles.time}>{formatSessionWindow(session)}</Text>
+              <Text style={styles.meta}>
+                {session.scope === 'solo' ? 'Solo' : 'Shared'}
+                {session.shortSessionMode ? ' · Short session' : ''}
+              </Text>
             </View>
             <StatusBadge
               label={session.status.replace('_', ' ')}
@@ -36,6 +40,12 @@ const styles = StyleSheet.create({
   copy: {
     flex: 1,
     gap: 4,
+  },
+  meta: {
+    color: Colors.dark.textTertiary,
+    fontFamily: Fonts.body,
+    fontSize: 12,
+    fontWeight: '400',
   },
   relative: {
     color: Colors.dark.textTertiary,

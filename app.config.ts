@@ -17,6 +17,13 @@ const plugins: NonNullable<ExpoConfig['plugins']> = [
   'expo-router',
   'expo-dev-client',
   'expo-apple-authentication',
+  [
+    'expo-location',
+    {
+      locationWhenInUsePermission:
+        'Twogether uses your location to detect when you are at a saved place with your partner.',
+    },
+  ],
 ];
 
 if (googleIosUrlScheme) {
@@ -33,7 +40,7 @@ plugins.push(
     'expo-notifications',
     {
       icon: './assets/images/icon.png',
-      color: '#FF8A5B',
+      color: '#5D1A1A',
     },
   ],
   [
@@ -52,19 +59,21 @@ const config: ExpoConfig = {
   version: '1.0.0',
   scheme: 'twogether',
   orientation: 'portrait',
-  userInterfaceStyle: 'dark',
+  userInterfaceStyle: 'light',
   newArchEnabled: true,
   icon: './assets/images/icon.png',
   splash: {
     image: './assets/images/splash-icon.png',
     resizeMode: 'contain',
-    backgroundColor: '#120C0B',
+    backgroundColor: '#F2EFEB',
   },
   ios: {
     bundleIdentifier,
     supportsTablet: false,
     usesAppleSignIn: true,
     infoPlist: {
+      NSLocationWhenInUseUsageDescription:
+        'Twogether uses your location to detect when you are at a saved place with your partner.',
       UIViewControllerBasedStatusBarAppearance: false,
     },
   },

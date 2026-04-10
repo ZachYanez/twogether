@@ -1,6 +1,9 @@
 {
-  "platforms": ["apple", "web"],
-  "apple": {
+  "platforms": ["ios", "android", "web"],
+  "ios": {
     "modules": ["TwogetherShieldModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.twogethershield.TwogetherShieldModule"]
   }
 }

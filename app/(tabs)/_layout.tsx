@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   tabBarLabel: {
-    fontFamily: 'System',
+    fontFamily: 'Inter_500Medium',
     fontSize: 10,
     fontWeight: '500',
   },

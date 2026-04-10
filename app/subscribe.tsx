@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { Colors, Fonts, Layout } from '@/constants/theme';
+import { Colors, Fonts } from '@/constants/theme';
 import { GlassCard } from '@/src/components/glass-card';
 import { PrimaryButton } from '@/src/components/primary-button';
 import { ScreenShell } from '@/src/components/screen-shell';
@@ -16,7 +16,7 @@ function formatExpiration(value: string | null) {
 
 export default function SubscribeScreen() {
   const router = useRouter();
-  const partner = useTwogetherStore((s) => s.partner);
+  const effectiveSubscriptionAccess = useTwogetherStore((s) => s.effectiveSubscriptionAccess);
   const subscriptionStatus = useTwogetherStore((s) => s.subscriptionStatus);
   const subscriptionPackages = useTwogetherStore((s) => s.subscriptionPackages);
   const subscriptionExpiresAt = useTwogetherStore((s) => s.subscriptionExpiresAt);
@@ -38,7 +38,8 @@ export default function SubscribeScreen() {
     }
   }
 
-  const isActive = subscriptionStatus === 'active';
+  const isActive = effectiveSubscriptionAccess.isPremium;
+  const includedViaPartner = effectiveSubscriptionAccess.source === 'partner';
 
   return (
     <ScreenShell
@@ -46,14 +47,17 @@ export default function SubscribeScreen() {
       subtitle="Unlock Twogether with a subscription to start your shared sessions.">
       {isActive ? (
         <GlassCard style={styles.activeCard}>
-          <Text style={styles.activeLabel}>Active</Text>
+          <Text style={styles.activeLabel}>
+            {includedViaPartner ? 'Included through your partner' : 'Active'}
+          </Text>
           <Text style={styles.activeDetail}>
-            {subscriptionWillRenew ? 'Renews' : 'Expires'}{' '}
-            {formatExpiration(subscriptionExpiresAt)}
+            {includedViaPartner
+              ? `${effectiveSubscriptionAccess.ownerDisplayName ?? 'Your partner'} is covering premium access for this pair.`
+              : `${subscriptionWillRenew ? 'Renews' : 'Expires'} ${formatExpiration(subscriptionExpiresAt)}`}
           </Text>
           <PrimaryButton
-            label={partner ? 'Continue' : 'Pair with partner'}
-            onPress={() => router.replace(partner ? '/' : '/pair')}
+            label="Continue"
+            onPress={() => router.replace('/')}
           />
         </GlassCard>
       ) : null}

@@ -3,12 +3,12 @@ import { useEffect } from 'react';
 
 import { useTwogetherStore } from '@/src/store/twogether-store';
 
-function resolveSignedInDestination(hasPartner: boolean, hasSubscription: boolean) {
+function resolveSignedInDestination(hasSubscription: boolean) {
   if (!hasSubscription) {
     return '/subscribe';
   }
 
-  return hasPartner ? '/' : '/pair';
+  return '/(tabs)';
 }
 
 export function AppGate() {
@@ -16,7 +16,9 @@ export function AppGate() {
   const pathname = usePathname();
   const segments = useSegments();
   const authStatus = useTwogetherStore((state) => state.authStatus);
-  const partner = useTwogetherStore((state) => state.partner);
+  const effectiveSubscriptionAccess = useTwogetherStore(
+    (state) => state.effectiveSubscriptionAccess
+  );
   const subscriptionStatus = useTwogetherStore((state) => state.subscriptionStatus);
 
   useEffect(() => {
@@ -24,9 +26,8 @@ export function AppGate() {
       return;
     }
 
-    const rootSegment = segments[0] ?? 'index';
-    const hasPartner = Boolean(partner);
-    const hasSubscription = subscriptionStatus === 'active';
+    const rootSegment = (segments[0] ?? 'index') as string;
+    const hasSubscription = effectiveSubscriptionAccess.isPremium;
     const onPublicRoute = rootSegment === 'welcome' || rootSegment === 'auth';
     const onAllowedUnpaidRoute =
       rootSegment === 'subscribe' || rootSegment === 'account' || rootSegment === '+not-found';
@@ -42,7 +43,7 @@ export function AppGate() {
       return;
     }
 
-    const signedInDestination = resolveSignedInDestination(hasPartner, hasSubscription);
+    const signedInDestination = resolveSignedInDestination(hasSubscription);
 
     if (onPublicRoute && pathname !== signedInDestination) {
       router.replace(signedInDestination);
@@ -61,15 +62,10 @@ export function AppGate() {
       return;
     }
 
-    if (!hasPartner && rootSegment === '(tabs)' && pathname !== '/pair') {
-      router.replace('/pair');
-      return;
+    if (rootSegment === 'pair' && pathname !== '/(tabs)') {
+      router.replace('/(tabs)');
     }
-
-    if (hasPartner && rootSegment === 'pair' && pathname !== '/') {
-      router.replace('/');
-    }
-  }, [authStatus, partner, pathname, router, segments, subscriptionStatus]);
+  }, [authStatus, effectiveSubscriptionAccess.isPremium, pathname, router, segments, subscriptionStatus]);
 
   return null;
 }

@@ -12,6 +12,8 @@ export default function AuthScreen() {
   const router = useRouter();
   const signInWithEmailPassword = useTwogetherStore((s) => s.signInWithEmailPassword);
   const registerWithEmailPassword = useTwogetherStore((s) => s.registerWithEmailPassword);
+  const pendingEmailConfirmationEmail = useTwogetherStore((s) => s.pendingEmailConfirmationEmail);
+  const clearPendingEmailConfirmation = useTwogetherStore((s) => s.clearPendingEmailConfirmation);
   const requestPasswordReset = useTwogetherStore((s) => s.requestPasswordReset);
   const signInWithApple = useTwogetherStore((s) => s.signInWithApple);
   const signInWithGoogle = useTwogetherStore((s) => s.signInWithGoogle);
@@ -37,7 +39,7 @@ export default function AuthScreen() {
   }, []);
 
   useEffect(() => {
-    if (authStatus === 'authenticated') router.replace('/');
+    if (authStatus === 'authenticated') router.replace('/(tabs)');
   }, [authStatus, router]);
 
   async function runProvider(
@@ -45,6 +47,7 @@ export default function AuthScreen() {
     action: () => Promise<void>
   ) {
     setLoadingProvider(provider);
+    clearPendingEmailConfirmation();
     setError(null);
     setNotice(null);
     try {
@@ -64,7 +67,12 @@ export default function AuthScreen() {
           return (
             <Pressable
               key={id}
-              onPress={() => { setMode(id); setError(null); setNotice(null); }}
+              onPress={() => {
+                setMode(id);
+                clearPendingEmailConfirmation();
+                setError(null);
+                setNotice(null);
+              }}
               style={[styles.segment, selected && styles.segmentActive]}>
               <Text style={[styles.segmentText, selected && styles.segmentTextActive]}>
                 {id === 'create_account' ? 'Create' : 'Sign in'}
@@ -124,7 +132,7 @@ export default function AuthScreen() {
         {appleAvailable ? (
           <AppleAuthentication.AppleAuthenticationButton
             buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
-            buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.WHITE}
+            buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
             cornerRadius={12}
             style={styles.appleButton}
             onPress={() => runProvider('apple', signInWithApple)}
@@ -149,6 +157,11 @@ export default function AuthScreen() {
       </Pressable>
 
       {error ? <Text style={styles.error}>{error}</Text> : null}
+      {pendingEmailConfirmationEmail ? (
+        <Text style={styles.notice}>
+          {`Check ${pendingEmailConfirmationEmail} for a confirmation link. Opening it will finish signing you in.`}
+        </Text>
+      ) : null}
       {notice ? <Text style={styles.notice}>{notice}</Text> : null}
     </ScreenShell>
   );
@@ -219,7 +232,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   segmentActive: {
-    backgroundColor: Colors.dark.text,
+    backgroundColor: Colors.dark.accent,
+    borderRadius: Layout.radiusSm,
   },
   segmentRow: {
     backgroundColor: Colors.dark.surface,
@@ -235,6 +249,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   segmentTextActive: {
-    color: Colors.dark.background,
+    color: '#FFFFFF',
   },
 });

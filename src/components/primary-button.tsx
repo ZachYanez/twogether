@@ -36,7 +36,7 @@ export function PrimaryButton({
         {loading ? (
           <ActivityIndicator
             size="small"
-            color={secondary ? Colors.dark.text : Colors.dark.background}
+            color={secondary ? Colors.dark.text : '#FFFFFF'}
           />
         ) : null}
         <Text
@@ -83,10 +83,10 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   primaryButton: {
-    backgroundColor: Colors.dark.text,
+    backgroundColor: Colors.dark.accent,
   },
   primaryLabel: {
-    color: Colors.dark.background,
+    color: '#FFFFFF',
   },
   secondaryButton: {
     backgroundColor: Colors.dark.surface,

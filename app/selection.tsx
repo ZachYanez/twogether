@@ -13,13 +13,14 @@ export default function SelectionScreen() {
   const router = useRouter();
   const selectionPreview = useTwogetherStore((s) => s.selectionPreview);
   const selectionConfigured = useTwogetherStore((s) => s.selectionConfigured);
+  const savedSessionConditions = useTwogetherStore((s) => s.savedSessionConditions);
   const setSelectionConfigured = useTwogetherStore((s) => s.setSelectionConfigured);
   const [loading, setLoading] = useState(false);
 
   return (
     <ScreenShell
       title="Choose apps"
-      subtitle="Select which apps to restrict during sessions.">
+      subtitle="Pick the apps your session profiles can block. Profiles control when and how those rules apply.">
       <View style={styles.list}>
         {selectionPreview.map((item) => (
           <View key={item.label} style={styles.row}>
@@ -28,6 +29,17 @@ export default function SelectionScreen() {
           </View>
         ))}
       </View>
+
+      <GlassCard style={styles.profileCard}>
+        <Text style={styles.stateLabel}>Profiles in use</Text>
+        <View style={styles.profileList}>
+          {savedSessionConditions.map((profile) => (
+            <Text key={profile.id} style={styles.profileItem}>
+              {profile.label} · {profile.sessionScope}
+            </Text>
+          ))}
+        </View>
+      </GlassCard>
 
       <GlassCard style={styles.stateCard}>
         <Text style={styles.stateLabel}>Selection</Text>
@@ -75,6 +87,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     gap: 2,
     paddingVertical: 14,
+  },
+  profileCard: {
+    gap: 8,
+  },
+  profileItem: {
+    color: Colors.dark.textSecondary,
+    fontFamily: Fonts.body,
+    fontSize: 14,
+    fontWeight: '400',
+    textTransform: 'capitalize',
+  },
+  profileList: {
+    gap: 4,
   },
   stateCard: {
     alignItems: 'center',

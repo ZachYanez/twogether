@@ -1,6 +1,12 @@
 import { format, formatDistanceToNowStrict, isToday, isTomorrow } from 'date-fns';
 
-import type { SavedSessionCondition, Session, SessionCondition } from '@/src/lib/twogether-types';
+import { formatTemplateDays } from '@/src/lib/session-templates';
+import type {
+  SavedSessionCondition,
+  Session,
+  SessionCondition,
+  SessionTemplate,
+} from '@/src/lib/twogether-types';
 
 export function formatSessionWindow(session: Session) {
   const start = new Date(session.scheduledStartAt);
@@ -41,6 +47,26 @@ export function formatSavedSessionCondition(
   condition: Pick<SavedSessionCondition, 'allowedMinutes' | 'intervalHours'>
 ) {
   return formatSessionCondition(condition);
+}
+
+export function formatTemplateSchedule(template: SessionTemplate) {
+  const hour = Math.floor(template.schedule.startMinuteOfDay / 60);
+  const minutes = template.schedule.startMinuteOfDay % 60;
+  const start = new Date();
+  start.setHours(hour, minutes, 0, 0);
+
+  return `${formatTemplateDays(template)} · ${format(start, 'h:mm a')}`;
+}
+
+export function formatTemplateDuration(template: SessionTemplate) {
+  const duration = template.durationMinutes;
+
+  if (duration >= 60) {
+    const hours = duration / 60;
+    return Number.isInteger(hours) ? `${hours} hr` : `${hours.toFixed(1)} hr`;
+  }
+
+  return `${duration} min`;
 }
 
 export function createInviteCode() {

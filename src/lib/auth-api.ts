@@ -221,7 +221,11 @@ export async function registerWithPassword(
   }
 
   if (hasBackend()) {
-    return postJson<AuthSessionResponse>('/auth/register', payload);
+    const response = await postJson<AuthSessionResponse>('/auth/register', payload);
+    return {
+      status: 'authenticated',
+      session: response.session,
+    };
   }
 
   return {

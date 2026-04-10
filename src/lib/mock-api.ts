@@ -71,7 +71,7 @@ export async function fetchDashboard(source: DashboardSource): Promise<Dashboard
 export async function fetchSessionFeed(sessions: Session[]) {
   await wait(140);
   return sessions
-    .filter((session) => session.status !== 'cancelled')
+    .filter((session) => !['cancelled', 'completed', 'interrupted'].includes(session.status))
     .sort(
       (left, right) =>
         new Date(left.scheduledStartAt).getTime() - new Date(right.scheduledStartAt).getTime()

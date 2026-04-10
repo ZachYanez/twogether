@@ -7,7 +7,6 @@ import { Colors, Fonts, Layout } from '@/constants/theme';
 import { PrimaryButton } from '@/src/components/primary-button';
 import { ScreenShell } from '@/src/components/screen-shell';
 import {
-  openRevenueCatManagementUrl,
   presentRevenueCatCustomerCenter,
 } from '@/src/lib/revenuecat';
 import { useTwogetherStore } from '@/src/store/twogether-store';
@@ -20,8 +19,8 @@ export default function AccountScreen() {
   const router = useRouter();
   const authSession = useTwogetherStore((s) => s.authSession);
   const currentUser = useTwogetherStore((s) => s.currentUser);
+  const effectiveSubscriptionAccess = useTwogetherStore((s) => s.effectiveSubscriptionAccess);
   const subscriptionStatus = useTwogetherStore((s) => s.subscriptionStatus);
-  const subscriptionManagementUrl = useTwogetherStore((s) => s.subscriptionManagementUrl);
   const subscriptionExpiresAt = useTwogetherStore((s) => s.subscriptionExpiresAt);
   const updateAccountDisplayName = useTwogetherStore((s) => s.updateAccountDisplayName);
   const requestPasswordReset = useTwogetherStore((s) => s.requestPasswordReset);
@@ -81,34 +80,48 @@ export default function AccountScreen() {
         <Text style={styles.sectionTitle}>Billing</Text>
         <View style={styles.detail}>
           <Text style={styles.detailLabel}>Status</Text>
-          <Text style={styles.detailValue}>{subscriptionStatus}</Text>
+          <Text style={styles.detailValue}>
+            {effectiveSubscriptionAccess.source === 'partner'
+              ? `Included via ${effectiveSubscriptionAccess.ownerDisplayName ?? 'partner'}`
+              : subscriptionStatus}
+          </Text>
         </View>
         <View style={styles.detail}>
           <Text style={styles.detailLabel}>Expires</Text>
-          <Text style={styles.detailValue}>{formatDate(subscriptionExpiresAt)}</Text>
+          <Text style={styles.detailValue}>
+            {formatDate(
+              effectiveSubscriptionAccess.source === 'partner'
+                ? effectiveSubscriptionAccess.expiresAt
+                : subscriptionExpiresAt
+            )}
+          </Text>
         </View>
-        <PrimaryButton
-          label="Billing center"
-          secondary
-          loading={busyAction === 'customer_center'}
-          onPress={() =>
-            void runAction('customer_center', async () => {
-              await presentRevenueCatCustomerCenter();
-              await syncSubscriptionState();
-            })
-          }
-        />
-        <PrimaryButton
-          label="Restore purchases"
-          secondary
-          loading={busyAction === 'restore'}
-          onPress={() =>
-            void runAction('restore', async () => {
-              await restoreSubscriptionPurchases();
-              setNotice('Purchases restored.');
-            })
-          }
-        />
+        {effectiveSubscriptionAccess.source !== 'partner' ? (
+          <>
+            <PrimaryButton
+              label="Billing center"
+              secondary
+              loading={busyAction === 'customer_center'}
+              onPress={() =>
+                void runAction('customer_center', async () => {
+                  await presentRevenueCatCustomerCenter();
+                  await syncSubscriptionState();
+                })
+              }
+            />
+            <PrimaryButton
+              label="Restore purchases"
+              secondary
+              loading={busyAction === 'restore'}
+              onPress={() =>
+                void runAction('restore', async () => {
+                  await restoreSubscriptionPurchases();
+                  setNotice('Purchases restored.');
+                })
+              }
+            />
+          </>
+        ) : null}
       </View>
 
       <View style={styles.divider} />

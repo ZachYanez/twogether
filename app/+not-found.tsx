@@ -11,7 +11,7 @@ export default function NotFoundScreen() {
   return (
     <ScreenShell title="Page not found">
       <View style={styles.body}>
-        <Text style={styles.text}>This screen doesn't exist.</Text>
+        <Text style={styles.text}>This screen doesn&apos;t exist.</Text>
         <PrimaryButton label="Go home" onPress={() => router.replace('/(tabs)')} />
       </View>
     </ScreenShell>
