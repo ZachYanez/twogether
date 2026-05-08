@@ -5,22 +5,22 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Colors, Fonts, Layout } from '@/constants/theme';
 import { PrimaryButton } from '@/src/components/primary-button';
 import { ScreenShell } from '@/src/components/screen-shell';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 const RADIUS_OPTIONS = [100, 150, 250, 400];
 
 export default function PlacesScreen() {
   const router = useRouter();
-  const savedPlaces = useTwogetherStore((s) => s.savedPlaces);
-  const currentPlaceId = useTwogetherStore((s) => s.currentPlaceId);
-  const partnerPlaceId = useTwogetherStore((s) => s.partnerPlaceId);
-  const locationPermissionStatus = useTwogetherStore((s) => s.locationPermissionStatus);
-  const locationBusy = useTwogetherStore((s) => s.locationBusy);
-  const locationError = useTwogetherStore((s) => s.locationError);
-  const requestLocationPermission = useTwogetherStore((s) => s.requestLocationPermission);
-  const savePlaceFromCurrentLocation = useTwogetherStore((s) => s.savePlaceFromCurrentLocation);
-  const deleteSavedPlace = useTwogetherStore((s) => s.deleteSavedPlace);
-  const refreshLocationAutomation = useTwogetherStore((s) => s.refreshLocationAutomation);
+  const savedPlaces = useLoveLockStore((s) => s.savedPlaces);
+  const currentPlaceId = useLoveLockStore((s) => s.currentPlaceId);
+  const partnerPlaceId = useLoveLockStore((s) => s.partnerPlaceId);
+  const locationPermissionStatus = useLoveLockStore((s) => s.locationPermissionStatus);
+  const locationBusy = useLoveLockStore((s) => s.locationBusy);
+  const locationError = useLoveLockStore((s) => s.locationError);
+  const requestLocationPermission = useLoveLockStore((s) => s.requestLocationPermission);
+  const savePlaceFromCurrentLocation = useLoveLockStore((s) => s.savePlaceFromCurrentLocation);
+  const deleteSavedPlace = useLoveLockStore((s) => s.deleteSavedPlace);
+  const refreshLocationAutomation = useLoveLockStore((s) => s.refreshLocationAutomation);
   const [label, setLabel] = useState('');
   const [radiusMeters, setRadiusMeters] = useState(150);
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +42,7 @@ export default function PlacesScreen() {
   return (
     <ScreenShell
       title="Saved places"
-      subtitle="Save places that matter to both of you, then let Twogether detect when you are there together."
+      subtitle="Save places that matter to both of you, then let Love Lock detect when you are there together."
       accessory={
         <Pressable onPress={() => router.back()}>
           <Text style={styles.done}>Done</Text>

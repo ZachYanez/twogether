@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android", "web"],
+  "ios": {
+    "modules": ["LoveLockShieldModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.lovelockshield.LoveLockShieldModule"]
+  }
+}

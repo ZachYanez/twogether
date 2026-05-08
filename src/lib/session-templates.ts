@@ -16,7 +16,7 @@ import type {
   SessionCondition,
   SessionScope,
   SessionTemplate,
-} from '@/src/lib/twogether-types';
+} from '@/src/lib/love-lock-types';
 
 export const DEFAULT_WARNING_MINUTES = [15];
 export const SHORT_SESSION_MAX_MINUTES = 30;

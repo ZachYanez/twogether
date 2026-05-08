@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { Colors, Fonts } from '@/constants/theme';
 import { formatSessionRelative, formatSessionWindow } from '@/src/lib/time';
-import type { Session } from '@/src/lib/twogether-types';
+import type { Session } from '@/src/lib/love-lock-types';
 import { GlassCard } from '@/src/components/glass-card';
 import { StatusBadge } from '@/src/components/status-badge';
 

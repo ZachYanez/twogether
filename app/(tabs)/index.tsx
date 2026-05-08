@@ -16,24 +16,24 @@ import { PrimaryButton } from '@/src/components/primary-button';
 import { formatSessionRelative, formatSessionWindow } from '@/src/lib/time';
 import { fetchDashboard } from '@/src/lib/mock-api';
 import { getDailyQuote } from '@/src/lib/daily-quotes';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 const FOREST_BACKGROUND_URL =
   'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=80';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const revision = useTwogetherStore((s) => s.revision);
-  const authorizationStatus = useTwogetherStore((s) => s.authorizationStatus);
-  const selectionConfigured = useTwogetherStore((s) => s.selectionConfigured);
-  const couple = useTwogetherStore((s) => s.couple);
-  const partner = useTwogetherStore((s) => s.partner);
-  const localShieldState = useTwogetherStore((s) => s.localShieldState);
-  const sessions = useTwogetherStore((s) => s.sessions);
-  const streak = useTwogetherStore((s) => s.streak);
-  const activeLocationSuggestion = useTwogetherStore((s) => s.activeLocationSuggestion);
-  const startLocationSuggestedSession = useTwogetherStore((s) => s.startLocationSuggestedSession);
-  const dismissLocationSuggestion = useTwogetherStore((s) => s.dismissLocationSuggestion);
+  const revision = useLoveLockStore((s) => s.revision);
+  const authorizationStatus = useLoveLockStore((s) => s.authorizationStatus);
+  const selectionConfigured = useLoveLockStore((s) => s.selectionConfigured);
+  const couple = useLoveLockStore((s) => s.couple);
+  const partner = useLoveLockStore((s) => s.partner);
+  const localShieldState = useLoveLockStore((s) => s.localShieldState);
+  const sessions = useLoveLockStore((s) => s.sessions);
+  const streak = useLoveLockStore((s) => s.streak);
+  const activeLocationSuggestion = useLoveLockStore((s) => s.activeLocationSuggestion);
+  const startLocationSuggestedSession = useLoveLockStore((s) => s.startLocationSuggestedSession);
+  const dismissLocationSuggestion = useLoveLockStore((s) => s.dismissLocationSuggestion);
 
   const dashboardSource = useMemo(
     () => ({
@@ -131,7 +131,7 @@ export default function HomeScreen() {
               <Text style={styles.cardEyebrow}>Ready when you are</Text>
               <Text style={styles.cardTitle}>Create a session to protect your next moment</Text>
               <Text style={styles.cardBody}>
-                Set the time, lock in the boundary, and let Twogether do the rest.
+                Set the time, lock in the boundary, and let Love Lock do the rest.
               </Text>
             </FrostedCard>
           )}

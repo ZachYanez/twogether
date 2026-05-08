@@ -9,5 +9,5 @@ Planned responsibilities:
 
 - Observe scheduled start and end intervals.
 - Apply and clear `ManagedSettings` shields using the locally stored Family Activity selection.
-- Persist local shield-state transitions into the Twogether app group.
+- Persist local shield-state transitions into the Love Lock app group.
 - Allow the main app to reconcile `active`, `completed`, or `interrupted` outcomes on next foreground.

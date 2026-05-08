@@ -3,10 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
 
 import { getSupabaseConfig } from '@/src/lib/supabase-config';
-import type { AuthProvider, AuthSession } from '@/src/lib/twogether-types';
+import type { AuthProvider, AuthSession } from '@/src/lib/love-lock-types';
 
-const SUPABASE_STORAGE_PREFIX = 'twogether.supabase.auth';
-const SUPABASE_EMAIL_REDIRECT_URL = 'twogether://auth';
+const SUPABASE_STORAGE_PREFIX = 'love-lock.supabase.auth';
+const SUPABASE_EMAIL_REDIRECT_URL = 'lovelock://auth';
 
 const secureStoreAdapter = {
   getItem: (key: string) => SecureStore.getItemAsync(`${SUPABASE_STORAGE_PREFIX}.${key}`),
@@ -49,7 +49,7 @@ export function getSupabaseEmailRedirectUrl() {
   return SUPABASE_EMAIL_REDIRECT_URL;
 }
 
-export function getTwogetherSupabaseClient() {
+export function getLoveLockSupabaseClient() {
   if (client) {
     return client;
   }
@@ -142,8 +142,8 @@ export function mapSupabaseSession(session: Session): AuthSession {
     session.user.user_metadata.display_name.trim()
       ? session.user.user_metadata.display_name.trim()
       : typeof session.user.email === 'string' && session.user.email.includes('@')
-        ? (session.user.email.split('@')[0] ?? 'Twogether')
-        : 'Twogether';
+        ? (session.user.email.split('@')[0] ?? 'Love Lock')
+        : 'Love Lock';
 
   return {
     userId: session.user.id,
@@ -165,7 +165,7 @@ export async function getSupabaseAuthSession(): Promise<AuthSession | null> {
     return null;
   }
 
-  const supabase = getTwogetherSupabaseClient();
+  const supabase = getLoveLockSupabaseClient();
   const { data, error } = await supabase.auth.getSession();
 
   if (error) {
@@ -189,7 +189,7 @@ export async function consumeSupabaseAuthCallbackUrl(url: string): Promise<AuthS
     return null;
   }
 
-  const supabase = getTwogetherSupabaseClient();
+  const supabase = getLoveLockSupabaseClient();
 
   if (payload.type === 'session') {
     const { data, error } = await supabase.auth.setSession({

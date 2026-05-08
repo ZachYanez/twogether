@@ -3,7 +3,7 @@ import * as Location from 'expo-location';
 import type {
   LocationPermissionStatus,
   SavedPlace,
-} from '@/src/lib/twogether-types';
+} from '@/src/lib/love-lock-types';
 
 type Coordinates = {
   latitude: number;

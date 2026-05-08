@@ -18,8 +18,8 @@ import { ScreenShell } from '@/src/components/screen-shell';
 import { StatusBadge } from '@/src/components/status-badge';
 import { getDailyQuote } from '@/src/lib/daily-quotes';
 import { formatSessionCondition, formatSessionWindow } from '@/src/lib/time';
-import type { SessionParticipant } from '@/src/lib/twogether-types';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import type { SessionParticipant } from '@/src/lib/love-lock-types';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 function getInitials(name: string) {
   return name
@@ -90,15 +90,15 @@ function getRemainingDisplay(endIso: string, now: number) {
 export default function SessionDetailScreen() {
   const router = useRouter();
   const { sessionId } = useLocalSearchParams<{ sessionId: string }>();
-  const session = useTwogetherStore((s) =>
+  const session = useLoveLockStore((s) =>
     s.sessions.find((e) => e.id === sessionId)
   );
-  const acceptSession = useTwogetherStore((s) => s.acceptSession);
-  const activateSession = useTwogetherStore((s) => s.activateSession);
-  const completeSession = useTwogetherStore((s) => s.completeSession);
-  const interruptSession = useTwogetherStore((s) => s.interruptSession);
-  const activeRewardMilestone = useTwogetherStore((s) => s.activeRewardMilestone);
-  const dismissRewardMilestone = useTwogetherStore((s) => s.dismissRewardMilestone);
+  const acceptSession = useLoveLockStore((s) => s.acceptSession);
+  const activateSession = useLoveLockStore((s) => s.activateSession);
+  const completeSession = useLoveLockStore((s) => s.completeSession);
+  const interruptSession = useLoveLockStore((s) => s.interruptSession);
+  const activeRewardMilestone = useLoveLockStore((s) => s.activeRewardMilestone);
+  const dismissRewardMilestone = useLoveLockStore((s) => s.dismissRewardMilestone);
   const [now, setNow] = useState(() => Date.now());
   const [bypassVisible, setBypassVisible] = useState(false);
   const [bypassReason, setBypassReason] = useState('Urgent call');

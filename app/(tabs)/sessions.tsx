@@ -10,15 +10,15 @@ import { SessionCard } from '@/src/components/session-card';
 import { fetchSessionFeed } from '@/src/lib/mock-api';
 import { getScopeLabel } from '@/src/lib/session-templates';
 import { formatTemplateDuration, formatTemplateSchedule } from '@/src/lib/time';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 export default function SessionsScreen() {
   const router = useRouter();
-  const sessions = useTwogetherStore((s) => s.sessions);
-  const sessionTemplates = useTwogetherStore((s) => s.sessionTemplates);
-  const revision = useTwogetherStore((s) => s.revision);
-  const startTemplateSession = useTwogetherStore((s) => s.startTemplateSession);
-  const toggleSessionTemplate = useTwogetherStore((s) => s.toggleSessionTemplate);
+  const sessions = useLoveLockStore((s) => s.sessions);
+  const sessionTemplates = useLoveLockStore((s) => s.sessionTemplates);
+  const revision = useLoveLockStore((s) => s.revision);
+  const startTemplateSession = useLoveLockStore((s) => s.startTemplateSession);
+  const toggleSessionTemplate = useLoveLockStore((s) => s.toggleSessionTemplate);
 
   const { data: feed = [] } = useQuery({
     queryKey: ['sessions', revision],

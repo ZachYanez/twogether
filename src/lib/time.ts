@@ -6,7 +6,7 @@ import type {
   Session,
   SessionCondition,
   SessionTemplate,
-} from '@/src/lib/twogether-types';
+} from '@/src/lib/love-lock-types';
 
 export function formatSessionWindow(session: Session) {
   const start = new Date(session.scheduledStartAt);

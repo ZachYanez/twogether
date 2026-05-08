@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Colors, Fonts } from '@/constants/theme';
-import type { SessionStatus, ShieldState } from '@/src/lib/twogether-types';
+import type { SessionStatus, ShieldState } from '@/src/lib/love-lock-types';
 
 type BadgeTone = 'active' | 'success' | 'danger' | 'muted';
 
