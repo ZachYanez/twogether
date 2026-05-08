@@ -8,14 +8,14 @@ import { ScreenShell } from '@/src/components/screen-shell';
 import { SessionCard } from '@/src/components/session-card';
 import { fetchHistoryFeed } from '@/src/lib/mock-api';
 import { computeHistorySummary } from '@/src/lib/session-templates';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 export default function HistoryScreen() {
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
-  const sessions = useTwogetherStore((s) => s.sessions);
-  const revision = useTwogetherStore((s) => s.revision);
-  const streak = useTwogetherStore((s) => s.streak);
+  const sessions = useLoveLockStore((s) => s.sessions);
+  const revision = useLoveLockStore((s) => s.revision);
+  const streak = useLoveLockStore((s) => s.streak);
   const summary = computeHistorySummary(sessions);
 
   const { data: feed = [] } = useQuery({

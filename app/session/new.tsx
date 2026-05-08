@@ -15,8 +15,8 @@ import { GlassCard } from '@/src/components/glass-card';
 import { PrimaryButton } from '@/src/components/primary-button';
 import { ScreenShell } from '@/src/components/screen-shell';
 import { isShortSession, profileToCondition } from '@/src/lib/session-templates';
-import { useTwogetherStore } from '@/src/store/twogether-store';
-import type { SessionTemplate } from '@/src/lib/twogether-types';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
+import type { SessionTemplate } from '@/src/lib/love-lock-types';
 
 const DURATIONS = [20, 25, 30, 45, 60, 90, 120];
 const WARNING_OPTIONS = [5, 10, 15];
@@ -67,10 +67,10 @@ function recurrenceDays(recurrence: RecurrenceMode, customDays: number[]) {
 
 export default function NewSessionScreen() {
   const router = useRouter();
-  const partner = useTwogetherStore((s) => s.partner);
-  const savedSessionConditions = useTwogetherStore((s) => s.savedSessionConditions);
-  const createSession = useTwogetherStore((s) => s.createSession);
-  const createSessionTemplate = useTwogetherStore((s) => s.createSessionTemplate);
+  const partner = useLoveLockStore((s) => s.partner);
+  const savedSessionConditions = useLoveLockStore((s) => s.savedSessionConditions);
+  const createSession = useLoveLockStore((s) => s.createSession);
+  const createSessionTemplate = useLoveLockStore((s) => s.createSessionTemplate);
   const [title, setTitle] = useState('');
   const [scope, setScope] = useState<'shared' | 'solo'>(partner ? 'shared' : 'solo');
   const [planMode, setPlanMode] = useState<PlanMode>('instant');

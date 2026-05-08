@@ -7,7 +7,7 @@ import { Colors, Fonts } from '@/constants/theme';
 import { GlassCard } from '@/src/components/glass-card';
 import { PrimaryButton } from '@/src/components/primary-button';
 import { ScreenShell } from '@/src/components/screen-shell';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 function formatExpiration(value: string | null) {
   if (!value) return 'N/A';
@@ -16,16 +16,16 @@ function formatExpiration(value: string | null) {
 
 export default function SubscribeScreen() {
   const router = useRouter();
-  const effectiveSubscriptionAccess = useTwogetherStore((s) => s.effectiveSubscriptionAccess);
-  const subscriptionStatus = useTwogetherStore((s) => s.subscriptionStatus);
-  const subscriptionPackages = useTwogetherStore((s) => s.subscriptionPackages);
-  const subscriptionExpiresAt = useTwogetherStore((s) => s.subscriptionExpiresAt);
-  const subscriptionWillRenew = useTwogetherStore((s) => s.subscriptionWillRenew);
-  const subscriptionBusy = useTwogetherStore((s) => s.subscriptionBusy);
-  const subscriptionError = useTwogetherStore((s) => s.subscriptionError);
-  const syncSubscriptionState = useTwogetherStore((s) => s.syncSubscriptionState);
-  const purchaseSubscriptionPackage = useTwogetherStore((s) => s.purchaseSubscriptionPackage);
-  const restoreSubscriptionPurchases = useTwogetherStore((s) => s.restoreSubscriptionPurchases);
+  const effectiveSubscriptionAccess = useLoveLockStore((s) => s.effectiveSubscriptionAccess);
+  const subscriptionStatus = useLoveLockStore((s) => s.subscriptionStatus);
+  const subscriptionPackages = useLoveLockStore((s) => s.subscriptionPackages);
+  const subscriptionExpiresAt = useLoveLockStore((s) => s.subscriptionExpiresAt);
+  const subscriptionWillRenew = useLoveLockStore((s) => s.subscriptionWillRenew);
+  const subscriptionBusy = useLoveLockStore((s) => s.subscriptionBusy);
+  const subscriptionError = useLoveLockStore((s) => s.subscriptionError);
+  const syncSubscriptionState = useLoveLockStore((s) => s.syncSubscriptionState);
+  const purchaseSubscriptionPackage = useLoveLockStore((s) => s.purchaseSubscriptionPackage);
+  const restoreSubscriptionPurchases = useLoveLockStore((s) => s.restoreSubscriptionPurchases);
   const [pendingPackageId, setPendingPackageId] = useState<string | null>(null);
   const [screenError, setScreenError] = useState<string | null>(null);
 
@@ -44,7 +44,7 @@ export default function SubscribeScreen() {
   return (
     <ScreenShell
       title="Subscribe"
-      subtitle="Unlock Twogether with a subscription to start your shared sessions.">
+      subtitle="Unlock Love Lock with a subscription to start your shared sessions.">
       {isActive ? (
         <GlassCard style={styles.activeCard}>
           <Text style={styles.activeLabel}>

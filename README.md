@@ -1,6 +1,6 @@
-# Twogether
+# Love Lock
 
-Twogether is an iOS-focused app for couples who want to schedule and protect shared phone-free time.
+Love Lock is an iOS-focused app for couples who want to schedule and protect shared phone-free time.
 
 The product combines relationship-oriented scheduling with a native Screen Time boundary layer, pairing flows, and subscription-ready mobile infrastructure.
 
@@ -28,8 +28,8 @@ The product combines relationship-oriented scheduling with a native Screen Time 
 
 - `app/` - Expo Router screens
 - `src/` - shared UI, state, and client logic
-- `modules/expo-twogether-shield/` - local Expo module for Screen Time APIs
-- `plugins/withTwogetherIOS.ts` - custom iOS config plugin
+- `modules/expo-love-lock-shield/` - local Expo module for Screen Time APIs
+- `plugins/withLoveLockIOS.ts` - custom iOS config plugin
 - `server/` - local auth server used during development
 
 ## Local Development
@@ -62,4 +62,4 @@ This app expects local configuration for Supabase, RevenueCat, auth, and provide
 
 ## Product Focus
 
-Twogether is built around one specific outcome: helping couples create protected time together with less distraction and more consistency.
+Love Lock is built around one specific outcome: helping couples create protected time together with less distraction and more consistency.

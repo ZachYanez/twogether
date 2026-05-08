@@ -6,21 +6,21 @@ import { Colors, Fonts } from '@/constants/theme';
 import { GlassCard } from '@/src/components/glass-card';
 import { PrimaryButton } from '@/src/components/primary-button';
 import { ScreenShell } from '@/src/components/screen-shell';
-import { requestAuthorization } from '@/src/lib/twogether-shield';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { requestAuthorization } from '@/src/lib/love-lock-shield';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 export default function AuthorizationScreen() {
   const router = useRouter();
-  const authorizationStatus = useTwogetherStore((s) => s.authorizationStatus);
-  const setAuthorizationStatus = useTwogetherStore((s) => s.setAuthorizationStatus);
-  const setLocalShieldState = useTwogetherStore((s) => s.setLocalShieldState);
+  const authorizationStatus = useLoveLockStore((s) => s.authorizationStatus);
+  const setAuthorizationStatus = useLoveLockStore((s) => s.setAuthorizationStatus);
+  const setLocalShieldState = useLoveLockStore((s) => s.setLocalShieldState);
   const [loading, setLoading] = useState(false);
   const [lastError, setLastError] = useState<string | null>(null);
 
   return (
     <ScreenShell
       title="Screen Time"
-      subtitle="Allow access so Twogether can shield apps during sessions.">
+      subtitle="Allow access so Love Lock can shield apps during sessions.">
       <GlassCard style={styles.statusCard}>
         <Text style={styles.statusLabel}>Current status</Text>
         <Text style={styles.statusValue}>{authorizationStatus}</Text>

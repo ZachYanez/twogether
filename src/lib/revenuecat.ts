@@ -6,7 +6,7 @@ import { Linking, Platform } from 'react-native';
 import type {
   SubscriptionPackageOption,
   SubscriptionSnapshot,
-} from '@/src/lib/twogether-types';
+} from '@/src/lib/love-lock-types';
 
 type RevenueCatExtra = {
   revenueCat?: {
@@ -14,7 +14,7 @@ type RevenueCatExtra = {
     entitlementIdentifier?: string;
     offeringIdentifier?: string;
   };
-  twogether?: {
+  loveLock?: {
     appGroup?: string;
   };
 };
@@ -62,7 +62,7 @@ function getRevenueCatConfig(): RevenueCatConfig | null {
     appleApiKey,
     entitlementIdentifier,
     offeringIdentifier: extra.revenueCat?.offeringIdentifier?.trim() || undefined,
-    appGroup: extra.twogether?.appGroup?.trim() || undefined,
+    appGroup: extra.loveLock?.appGroup?.trim() || undefined,
   };
 }
 

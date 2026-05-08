@@ -2,7 +2,7 @@ import DeviceActivity
 import ManagedSettings
 
 final class DeviceActivityMonitorExtension: DeviceActivityMonitor {
-  private let managedStore = ManagedSettingsStore(named: .init("Twogether"))
+  private let managedStore = ManagedSettingsStore(named: .init("LoveLock"))
 
   override func intervalDidStart(for activity: DeviceActivityName) {
     super.intervalDidStart(for: activity)

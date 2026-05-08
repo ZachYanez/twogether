@@ -93,7 +93,7 @@ function createId(prefix: string) {
 }
 
 function deriveDisplayNameFromEmail(email: string) {
-  return (email.split('@')[0] ?? 'Twogether')
+  return (email.split('@')[0] ?? 'Love Lock')
     .split(/[._-]/g)
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
@@ -437,5 +437,5 @@ app.delete('/account', authenticateRequest, (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Twogether auth server listening on http://localhost:${port}`);
+  console.log(`Love Lock auth server listening on http://localhost:${port}`);
 });

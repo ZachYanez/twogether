@@ -1,11 +1,11 @@
 import { getApiBaseUrl } from '@/src/lib/api-config';
 import {
   getSupabaseEmailRedirectUrl,
-  getTwogetherSupabaseClient,
+  getLoveLockSupabaseClient,
   hasSupabaseClientConfig,
   mapSupabaseSession,
 } from '@/src/lib/supabase-client';
-import type { AuthProvider, AuthSession } from '@/src/lib/twogether-types';
+import type { AuthProvider, AuthSession } from '@/src/lib/love-lock-types';
 
 type PasswordAuthPayload = {
   email: string;
@@ -83,7 +83,7 @@ function createUserId(prefix: AuthProvider, unique: string) {
 }
 
 function createDisplayNameFromEmail(email: string) {
-  const local = email.split('@')[0] ?? 'Twogether';
+  const local = email.split('@')[0] ?? 'Love Lock';
   return local
     .split(/[._-]/g)
     .filter(Boolean)
@@ -168,7 +168,7 @@ function hasBackend() {
 async function registerWithSupabase(
   payload: PasswordAuthPayload
 ): Promise<PasswordRegistrationResponse> {
-  const supabase = getTwogetherSupabaseClient();
+  const supabase = getLoveLockSupabaseClient();
   const { data, error } = await supabase.auth.signUp({
     email: payload.email,
     password: payload.password,
@@ -196,7 +196,7 @@ async function registerWithSupabase(
 }
 
 async function loginWithSupabase(payload: PasswordAuthPayload): Promise<AuthSessionResponse> {
-  const supabase = getTwogetherSupabaseClient();
+  const supabase = getLoveLockSupabaseClient();
   const { data, error } = await supabase.auth.signInWithPassword({
     email: payload.email,
     password: payload.password,
@@ -309,7 +309,7 @@ export async function logoutSession(session: AuthSession | null) {
   }
 
   if (hasSupabaseClientConfig()) {
-    const supabase = getTwogetherSupabaseClient();
+    const supabase = getLoveLockSupabaseClient();
     const { error } = await supabase.auth.signOut();
     assertSupabaseError(error);
     return;
@@ -332,7 +332,7 @@ export async function requestPasswordReset(
   payload: PasswordResetPayload
 ): Promise<PasswordResetResponse> {
   if (hasSupabaseClientConfig()) {
-    const supabase = getTwogetherSupabaseClient();
+    const supabase = getLoveLockSupabaseClient();
     const { error } = await supabase.auth.resetPasswordForEmail(payload.email);
     assertSupabaseError(error);
 
@@ -357,7 +357,7 @@ export async function updateAccountProfile(
   payload: AccountProfilePayload
 ): Promise<AccountProfileResponse> {
   if (hasSupabaseClientConfig()) {
-    const supabase = getTwogetherSupabaseClient();
+    const supabase = getLoveLockSupabaseClient();
     const { error: authError } = await supabase.auth.updateUser({
       data: {
         display_name: payload.displayName,

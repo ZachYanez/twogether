@@ -9,7 +9,7 @@ import { ScreenShell } from '@/src/components/screen-shell';
 import {
   presentRevenueCatCustomerCenter,
 } from '@/src/lib/revenuecat';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 function formatDate(value: string | null) {
   return value ? format(new Date(value), 'MMM d, yyyy') : 'N/A';
@@ -17,17 +17,17 @@ function formatDate(value: string | null) {
 
 export default function AccountScreen() {
   const router = useRouter();
-  const authSession = useTwogetherStore((s) => s.authSession);
-  const currentUser = useTwogetherStore((s) => s.currentUser);
-  const effectiveSubscriptionAccess = useTwogetherStore((s) => s.effectiveSubscriptionAccess);
-  const subscriptionStatus = useTwogetherStore((s) => s.subscriptionStatus);
-  const subscriptionExpiresAt = useTwogetherStore((s) => s.subscriptionExpiresAt);
-  const updateAccountDisplayName = useTwogetherStore((s) => s.updateAccountDisplayName);
-  const requestPasswordReset = useTwogetherStore((s) => s.requestPasswordReset);
-  const restoreSubscriptionPurchases = useTwogetherStore((s) => s.restoreSubscriptionPurchases);
-  const syncSubscriptionState = useTwogetherStore((s) => s.syncSubscriptionState);
-  const signOut = useTwogetherStore((s) => s.signOut);
-  const deleteAccount = useTwogetherStore((s) => s.deleteAccount);
+  const authSession = useLoveLockStore((s) => s.authSession);
+  const currentUser = useLoveLockStore((s) => s.currentUser);
+  const effectiveSubscriptionAccess = useLoveLockStore((s) => s.effectiveSubscriptionAccess);
+  const subscriptionStatus = useLoveLockStore((s) => s.subscriptionStatus);
+  const subscriptionExpiresAt = useLoveLockStore((s) => s.subscriptionExpiresAt);
+  const updateAccountDisplayName = useLoveLockStore((s) => s.updateAccountDisplayName);
+  const requestPasswordReset = useLoveLockStore((s) => s.requestPasswordReset);
+  const restoreSubscriptionPurchases = useLoveLockStore((s) => s.restoreSubscriptionPurchases);
+  const syncSubscriptionState = useLoveLockStore((s) => s.syncSubscriptionState);
+  const signOut = useLoveLockStore((s) => s.signOut);
+  const deleteAccount = useLoveLockStore((s) => s.deleteAccount);
   const [displayName, setDisplayName] = useState(currentUser?.displayName ?? '');
   const [busyAction, setBusyAction] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);

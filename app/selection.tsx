@@ -6,15 +6,15 @@ import { Colors, Fonts } from '@/constants/theme';
 import { GlassCard } from '@/src/components/glass-card';
 import { PrimaryButton } from '@/src/components/primary-button';
 import { ScreenShell } from '@/src/components/screen-shell';
-import { presentActivityPicker } from '@/src/lib/twogether-shield';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { presentActivityPicker } from '@/src/lib/love-lock-shield';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 export default function SelectionScreen() {
   const router = useRouter();
-  const selectionPreview = useTwogetherStore((s) => s.selectionPreview);
-  const selectionConfigured = useTwogetherStore((s) => s.selectionConfigured);
-  const savedSessionConditions = useTwogetherStore((s) => s.savedSessionConditions);
-  const setSelectionConfigured = useTwogetherStore((s) => s.setSelectionConfigured);
+  const selectionPreview = useLoveLockStore((s) => s.selectionPreview);
+  const selectionConfigured = useLoveLockStore((s) => s.selectionConfigured);
+  const savedSessionConditions = useLoveLockStore((s) => s.savedSessionConditions);
+  const setSelectionConfigured = useLoveLockStore((s) => s.setSelectionConfigured);
   const [loading, setLoading] = useState(false);
 
   return (

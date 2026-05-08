@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Colors, Fonts } from '@/constants/theme';
-import type { DashboardData } from '@/src/lib/twogether-types';
+import type { DashboardData } from '@/src/lib/love-lock-types';
 import { GlassCard } from '@/src/components/glass-card';
 
 export function ReadinessMeter({

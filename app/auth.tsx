@@ -6,18 +6,18 @@ import { Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-na
 import { Colors, Fonts, Layout } from '@/constants/theme';
 import { PrimaryButton } from '@/src/components/primary-button';
 import { ScreenShell } from '@/src/components/screen-shell';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 export default function AuthScreen() {
   const router = useRouter();
-  const signInWithEmailPassword = useTwogetherStore((s) => s.signInWithEmailPassword);
-  const registerWithEmailPassword = useTwogetherStore((s) => s.registerWithEmailPassword);
-  const pendingEmailConfirmationEmail = useTwogetherStore((s) => s.pendingEmailConfirmationEmail);
-  const clearPendingEmailConfirmation = useTwogetherStore((s) => s.clearPendingEmailConfirmation);
-  const requestPasswordReset = useTwogetherStore((s) => s.requestPasswordReset);
-  const signInWithApple = useTwogetherStore((s) => s.signInWithApple);
-  const signInWithGoogle = useTwogetherStore((s) => s.signInWithGoogle);
-  const authStatus = useTwogetherStore((s) => s.authStatus);
+  const signInWithEmailPassword = useLoveLockStore((s) => s.signInWithEmailPassword);
+  const registerWithEmailPassword = useLoveLockStore((s) => s.registerWithEmailPassword);
+  const pendingEmailConfirmationEmail = useLoveLockStore((s) => s.pendingEmailConfirmationEmail);
+  const clearPendingEmailConfirmation = useLoveLockStore((s) => s.clearPendingEmailConfirmation);
+  const requestPasswordReset = useLoveLockStore((s) => s.requestPasswordReset);
+  const signInWithApple = useLoveLockStore((s) => s.signInWithApple);
+  const signInWithGoogle = useLoveLockStore((s) => s.signInWithGoogle);
+  const authStatus = useLoveLockStore((s) => s.authStatus);
   const [appleAvailable, setAppleAvailable] = useState(false);
   const [mode, setMode] = useState<'sign_in' | 'create_account'>('create_account');
   const [displayName, setDisplayName] = useState('');

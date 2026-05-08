@@ -1,8 +1,8 @@
 import * as SecureStore from 'expo-secure-store';
 
-import type { AuthSession } from '@/src/lib/twogether-types';
+import type { AuthSession } from '@/src/lib/love-lock-types';
 
-const AUTH_SESSION_KEY = 'twogether.auth.session';
+const AUTH_SESSION_KEY = 'love-lock.auth.session';
 
 export async function readStoredAuthSession(): Promise<AuthSession | null> {
   try {

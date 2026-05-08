@@ -11,7 +11,7 @@ import {
 
 import { Colors, Fonts, Layout } from '@/constants/theme';
 import { PrimaryButton } from '@/src/components/primary-button';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 function isValidPairContact(value: string) {
   const trimmed = value.trim();
@@ -24,8 +24,8 @@ type PairMode = 'invite' | 'join';
 
 export default function PairScreen() {
   const router = useRouter();
-  const requestPairing = useTwogetherStore((s) => s.requestPairing);
-  const joinPairingWithInviteCode = useTwogetherStore((s) => s.joinPairingWithInviteCode);
+  const requestPairing = useLoveLockStore((s) => s.requestPairing);
+  const joinPairingWithInviteCode = useLoveLockStore((s) => s.joinPairingWithInviteCode);
   const [mode, setMode] = useState<PairMode>('invite');
   const [partnerName, setPartnerName] = useState('');
   const [contact, setContact] = useState('');

@@ -20,11 +20,11 @@ import { Colors } from '@/constants/theme';
 import { AppGate } from '@/src/components/app-gate';
 import { AppProviders } from '@/src/providers/app-providers';
 import {
-  getTwogetherSupabaseClient,
+  getLoveLockSupabaseClient,
   hasSupabaseClientConfig,
   mapSupabaseSession,
 } from '@/src/lib/supabase-client';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -53,13 +53,13 @@ export default function RootLayout() {
     Manrope_700Bold,
     Inter_500Medium,
   });
-  const hydrateAuthSession = useTwogetherStore((state) => state.hydrateAuthSession);
-  const consumeSupabaseAuthCallback = useTwogetherStore((state) => state.consumeSupabaseAuthCallback);
-  const syncAuthenticatedSession = useTwogetherStore((state) => state.syncAuthenticatedSession);
-  const authStatus = useTwogetherStore((state) => state.authStatus);
-  const savedPlacesCount = useTwogetherStore((state) => state.savedPlaces.length);
-  const locationAutomationEnabled = useTwogetherStore((state) => state.locationAutomationEnabled);
-  const refreshLocationAutomation = useTwogetherStore((state) => state.refreshLocationAutomation);
+  const hydrateAuthSession = useLoveLockStore((state) => state.hydrateAuthSession);
+  const consumeSupabaseAuthCallback = useLoveLockStore((state) => state.consumeSupabaseAuthCallback);
+  const syncAuthenticatedSession = useLoveLockStore((state) => state.syncAuthenticatedSession);
+  const authStatus = useLoveLockStore((state) => state.authStatus);
+  const savedPlacesCount = useLoveLockStore((state) => state.savedPlaces.length);
+  const locationAutomationEnabled = useLoveLockStore((state) => state.locationAutomationEnabled);
+  const refreshLocationAutomation = useLoveLockStore((state) => state.refreshLocationAutomation);
 
   const onLayoutReady = useCallback(async () => {
     if (fontsLoaded) {
@@ -97,7 +97,7 @@ export default function RootLayout() {
         void consumeSupabaseAuthCallback(url);
       });
 
-      authSubscription = getTwogetherSupabaseClient().auth.onAuthStateChange((_event, session) => {
+      authSubscription = getLoveLockSupabaseClient().auth.onAuthStateChange((_event, session) => {
         if (!session) {
           return;
         }

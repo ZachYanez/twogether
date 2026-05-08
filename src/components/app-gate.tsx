@@ -1,7 +1,7 @@
 import { usePathname, useRouter, useSegments } from 'expo-router';
 import { useEffect } from 'react';
 
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 function resolveSignedInDestination(hasSubscription: boolean) {
   if (!hasSubscription) {
@@ -15,11 +15,11 @@ export function AppGate() {
   const router = useRouter();
   const pathname = usePathname();
   const segments = useSegments();
-  const authStatus = useTwogetherStore((state) => state.authStatus);
-  const effectiveSubscriptionAccess = useTwogetherStore(
+  const authStatus = useLoveLockStore((state) => state.authStatus);
+  const effectiveSubscriptionAccess = useLoveLockStore(
     (state) => state.effectiveSubscriptionAccess
   );
-  const subscriptionStatus = useTwogetherStore((state) => state.subscriptionStatus);
+  const subscriptionStatus = useLoveLockStore((state) => state.subscriptionStatus);
 
   useEffect(() => {
     if (authStatus === 'restoring') {

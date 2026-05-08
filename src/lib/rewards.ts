@@ -1,4 +1,4 @@
-import type { RewardMilestone } from '@/src/lib/twogether-types';
+import type { RewardMilestone } from '@/src/lib/love-lock-types';
 
 export const REWARD_MILESTONES: RewardMilestone[] = [
   {

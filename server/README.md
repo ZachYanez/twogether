@@ -1,4 +1,4 @@
-# Twogether Auth Server
+# Love Lock Auth Server
 
 This is a minimal development auth API that matches the client contract used by the Expo app.
 
@@ -27,5 +27,5 @@ Then set `EXPO_PUBLIC_API_URL=http://localhost:4000` in the app `.env` and resta
 
 ## Notes
 
-- Apple and Google routes currently trust the provider payload coming from the app. For production, verify Apple identity tokens and Google ID tokens server-side before issuing Twogether sessions.
+- Apple and Google routes currently trust the provider payload coming from the app. For production, verify Apple identity tokens and Google ID tokens server-side before issuing Love Lock sessions.
 - Password reset currently returns an accepted response only. It does not send real email.

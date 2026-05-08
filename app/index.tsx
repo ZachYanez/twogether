@@ -1,13 +1,13 @@
 import { Redirect } from 'expo-router';
 
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 export default function IndexRoute() {
-  const authStatus = useTwogetherStore((state) => state.authStatus);
-  const effectiveSubscriptionAccess = useTwogetherStore(
+  const authStatus = useLoveLockStore((state) => state.authStatus);
+  const effectiveSubscriptionAccess = useLoveLockStore(
     (state) => state.effectiveSubscriptionAccess
   );
-  const subscriptionStatus = useTwogetherStore((state) => state.subscriptionStatus);
+  const subscriptionStatus = useLoveLockStore((state) => state.subscriptionStatus);
 
   if (authStatus === 'restoring' || subscriptionStatus === 'loading') {
     return null;

@@ -3,14 +3,14 @@ import { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 
 import { Colors, Fonts } from '@/constants/theme';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLoveLockStore } from '@/src/store/love-lock-store';
 
 const TRANSITION_DELAY_MS = 3000;
 
 export default function WelcomeScreen() {
   const router = useRouter();
-  const authStatus = useTwogetherStore((state) => state.authStatus);
-  const enterPreviewMode = useTwogetherStore((state) => state.enterPreviewMode);
+  const authStatus = useLoveLockStore((state) => state.authStatus);
+  const enterPreviewMode = useLoveLockStore((state) => state.enterPreviewMode);
 
   const titleTranslateY = useRef(new Animated.Value(-40)).current;
   const titleOpacity = useRef(new Animated.Value(0)).current;
@@ -68,7 +68,7 @@ export default function WelcomeScreen() {
               transform: [{ translateY: titleTranslateY }],
             },
           ]}>
-          Twogether
+          Love Lock
         </Animated.Text>
         <Animated.Text style={[styles.subtitle, { opacity: subtitleOpacity }]}>
           More Quality Time. Less Screen Time.

@@ -1,8 +1,8 @@
 import * as SecureStore from 'expo-secure-store';
 
-import type { SavedSessionCondition } from '@/src/lib/twogether-types';
+import type { SavedSessionCondition } from '@/src/lib/love-lock-types';
 
-const SAVED_SESSION_CONDITIONS_KEY = 'twogether.saved-session-conditions';
+const SAVED_SESSION_CONDITIONS_KEY = 'love-lock.saved-session-conditions';
 
 export async function readSavedSessionConditions(): Promise<SavedSessionCondition[]> {
   try {

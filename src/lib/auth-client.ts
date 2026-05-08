@@ -14,7 +14,7 @@ import {
   updateAccountProfile as updateAccountProfileRequest,
 } from '@/src/lib/auth-api';
 import { consumeSupabaseAuthCallbackUrl } from '@/src/lib/supabase-client';
-import type { AuthSession } from '@/src/lib/twogether-types';
+import type { AuthSession } from '@/src/lib/love-lock-types';
 
 type EmailPasswordCredentials = {
   email: string;
@@ -37,7 +37,7 @@ function getAuthConfig(): AuthConfig {
 }
 
 function createDisplayNameFromEmail(email: string) {
-  const local = email.split('@')[0] ?? 'Twogether';
+  const local = email.split('@')[0] ?? 'Love Lock';
   return local
     .split(/[._-]/g)
     .filter(Boolean)
