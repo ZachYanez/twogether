@@ -4,9 +4,9 @@ import type {
   LocationAutomationMode,
   LocationPermissionStatus,
   SavedPlace,
-} from '@/src/lib/twogether-types';
+} from '@/src/lib/lovelock-types';
 
-const LOCATION_AUTOMATION_STATE_KEY = 'twogether.location-automation.state';
+const LOCATION_AUTOMATION_STATE_KEY = 'lovelock.location-automation.state';
 
 type StoredLocationAutomationState = {
   savedPlaces: SavedPlace[];

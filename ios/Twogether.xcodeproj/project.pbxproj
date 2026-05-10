@@ -11,21 +11,51 @@
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		6F641C994369946EF5CF77E7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 72A740E9B1DD2187F9C46F2B /* PrivacyInfo.xcprivacy */; };
 		7DEC45422650F3EFE9C20156 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C30EDF0696FEA9643D0EF0 /* ExpoModulesProvider.swift */; };
+		9065616E8EBF444EA18A00FE /* TwogetherDeviceActivityMonitor.appex in Copy Files */ = {isa = PBXBuildFile; fileRef = 45049F7F19624067B7872DB4 /* TwogetherDeviceActivityMonitor.appex */; };
+		A69DA010A2BE4866B089AB4E /* DeviceActivityMonitorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C8883410C04245B379DAC1 /* DeviceActivityMonitorExtension.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 		F847FBF0271BAF8C256CEC84 /* libPods-Twogether.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D1D3824D1FEEEAF68138A2 /* libPods-Twogether.a */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		9A07D0A2B4C84BC1A1D6E124 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AF5EFB8DFA2B47E0A00B4731;
+			remoteInfo = TwogetherDeviceActivityMonitor;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		01AB9EB42DD74516A7C73AE7 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				9065616E8EBF444EA18A00FE /* TwogetherDeviceActivityMonitor.appex in Copy Files */,
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		13B02DB0D1AD403B875F9305 /* TwogetherDeviceActivityMonitor.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = TwogetherDeviceActivityMonitor.entitlements; path = TwogetherDeviceActivityMonitor.entitlements; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Twogether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Twogether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Twogether/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Twogether/Info.plist; sourceTree = "<group>"; };
 		27D1D3824D1FEEEAF68138A2 /* libPods-Twogether.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Twogether.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		45049F7F19624067B7872DB4 /* TwogetherDeviceActivityMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TwogetherDeviceActivityMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		61C8883410C04245B379DAC1 /* DeviceActivityMonitorExtension.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = DeviceActivityMonitorExtension.swift; path = DeviceActivityMonitorExtension.swift; sourceTree = "<group>"; };
 		72A740E9B1DD2187F9C46F2B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Twogether/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Twogether/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		C2B38ED2F11DAA9A066A3C52 /* Pods-Twogether.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Twogether.debug.xcconfig"; path = "Target Support Files/Pods-Twogether/Pods-Twogether.debug.xcconfig"; sourceTree = "<group>"; };
 		C82C0A00577474F84F490423 /* Pods-Twogether.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Twogether.release.xcconfig"; path = "Target Support Files/Pods-Twogether/Pods-Twogether.release.xcconfig"; sourceTree = "<group>"; };
+		CF13BC15078F470791CCA313 /* Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = Info.plist; path = Info.plist; sourceTree = "<group>"; };
 		E9C30EDF0696FEA9643D0EF0 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Twogether/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Twogether/AppDelegate.swift; sourceTree = "<group>"; };
@@ -38,6 +68,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				F847FBF0271BAF8C256CEC84 /* libPods-Twogether.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E37E0471768C4C99BC130FD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,6 +104,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4FABD4A98CF143308F4B790F /* TwogetherDeviceActivityMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				61C8883410C04245B379DAC1 /* DeviceActivityMonitorExtension.swift */,
+				CF13BC15078F470791CCA313 /* Info.plist */,
+				13B02DB0D1AD403B875F9305 /* TwogetherDeviceActivityMonitor.entitlements */,
+			);
+			name = TwogetherDeviceActivityMonitor;
+			path = TwogetherDeviceActivityMonitor;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07FAE1A68108700A75B9A /* Twogether */,
+				4FABD4A98CF143308F4B790F /* TwogetherDeviceActivityMonitor */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
@@ -93,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* Twogether.app */,
+				45049F7F19624067B7872DB4 /* TwogetherDeviceActivityMonitor.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -148,15 +198,34 @@
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
 				6CAE1062498F4C3894F7003A /* [Expo Dev Launcher] Strip Local Network Keys for Release */,
 				29BEF7EEFB869EB80E84C0E0 /* [CP] Embed Pods Frameworks */,
+				01AB9EB42DD74516A7C73AE7 /* Copy Files */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				0F437BA13E8A4BB3B9F5AF3E /* PBXTargetDependency */,
 			);
 			name = Twogether;
 			productName = Twogether;
 			productReference = 13B07F961A680F5B00A75B9A /* Twogether.app */;
 			productType = "com.apple.product-type.application";
+		};
+		AF5EFB8DFA2B47E0A00B4731 /* TwogetherDeviceActivityMonitor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F990A5F159204ECDA4BF459C /* Build configuration list for PBXNativeTarget "TwogetherDeviceActivityMonitor" */;
+			buildPhases = (
+				9C7F0C285EEB4BA29090158C /* Sources */,
+				E37E0471768C4C99BC130FD3 /* Frameworks */,
+				3D993DADF7E144EA8B722263 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TwogetherDeviceActivityMonitor;
+			productName = TwogetherDeviceActivityMonitor;
+			productReference = 45049F7F19624067B7872DB4 /* TwogetherDeviceActivityMonitor.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -169,6 +238,10 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 593892U633;
 						LastSwiftMigration = 1250;
+						ProvisioningStyle = Automatic;
+					};
+					AF5EFB8DFA2B47E0A00B4731 = {
+						DevelopmentTeam = 593892U633;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -187,6 +260,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* Twogether */,
+				AF5EFB8DFA2B47E0A00B4731 /* TwogetherDeviceActivityMonitor */,
 			);
 		};
 /* End PBXProject section */
@@ -200,6 +274,13 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				6F641C994369946EF5CF77E7 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D993DADF7E144EA8B722263 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,7 +454,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9C7F0C285EEB4BA29090158C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A69DA010A2BE4866B089AB4E /* DeviceActivityMonitorExtension.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0F437BA13E8A4BB3B9F5AF3E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AF5EFB8DFA2B47E0A00B4731 /* TwogetherDeviceActivityMonitor */;
+			targetProxy = 9A07D0A2B4C84BC1A1D6E124 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
@@ -393,20 +490,20 @@
 					"FB_SONARKIT_ENABLED=1",
 				);
 				INFOPLIST_FILE = Twogether/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.twogether.app;
-				PRODUCT_NAME = Twogether;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lovelock.app;
+				PRODUCT_NAME = LoveLock;
 				SWIFT_OBJC_BRIDGING_HEADER = "Twogether/Twogether-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -427,24 +524,50 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 593892U633;
 				INFOPLIST_FILE = Twogether/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.twogether.app;
-				PRODUCT_NAME = Twogether;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lovelock.app;
+				PRODUCT_NAME = LoveLock;
 				SWIFT_OBJC_BRIDGING_HEADER = "Twogether/Twogether-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		40E24620FE654CF197EEC0C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TwogetherDeviceActivityMonitor/TwogetherDeviceActivityMonitor.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 593892U633;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TwogetherDeviceActivityMonitor/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lovelock.app.DeviceActivityMonitor;
+				PRODUCT_NAME = TwogetherDeviceActivityMonitor;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -495,7 +618,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -551,7 +674,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -565,6 +688,36 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
+		};
+		C1A9A604FA2A49C6BDCD17D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TwogetherDeviceActivityMonitor/TwogetherDeviceActivityMonitor.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 593892U633;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TwogetherDeviceActivityMonitor/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lovelock.app.DeviceActivityMonitor;
+				PRODUCT_NAME = TwogetherDeviceActivityMonitor;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
@@ -583,6 +736,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F990A5F159204ECDA4BF459C /* Build configuration list for PBXNativeTarget "TwogetherDeviceActivityMonitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C1A9A604FA2A49C6BDCD17D0 /* Debug */,
+				40E24620FE654CF197EEC0C4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

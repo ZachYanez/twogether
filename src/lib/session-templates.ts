@@ -16,7 +16,8 @@ import type {
   SessionCondition,
   SessionScope,
   SessionTemplate,
-} from '@/src/lib/twogether-types';
+} from '@/src/lib/lovelock-types';
+import { fullBlockConditionFields } from '@/src/lib/session-block-mode';
 
 export const DEFAULT_WARNING_MINUTES = [15];
 export const SHORT_SESSION_MAX_MINUTES = 30;
@@ -28,8 +29,7 @@ export function createDefaultSessionConditions(now = new Date().toISOString()): 
       id: 'condition-date-night',
       label: 'Date night',
       defaultTitle: 'Date night',
-      allowedMinutes: 5,
-      intervalHours: 3,
+      ...fullBlockConditionFields(),
       graceSeconds: 300,
       description: 'A stronger block for a longer evening together.',
       intensity: 'deep',
@@ -42,8 +42,7 @@ export function createDefaultSessionConditions(now = new Date().toISOString()): 
       id: 'condition-evening-walk',
       label: 'Walk',
       defaultTitle: 'Evening walk',
-      allowedMinutes: 10,
-      intervalHours: 2,
+      ...fullBlockConditionFields(),
       graceSeconds: 180,
       description: 'Keep camera, music, and maps accessible while social and work stay quiet.',
       intensity: 'balanced',
@@ -56,8 +55,7 @@ export function createDefaultSessionConditions(now = new Date().toISOString()): 
       id: 'condition-coffee-check-in',
       label: 'Coffee',
       defaultTitle: 'Coffee check-in',
-      allowedMinutes: 15,
-      intervalHours: 1,
+      ...fullBlockConditionFields(),
       graceSeconds: 120,
       description: 'A lighter profile for short daily windows.',
       intensity: 'light',
@@ -70,8 +68,7 @@ export function createDefaultSessionConditions(now = new Date().toISOString()): 
       id: 'condition-study-sesh',
       label: 'Study sesh',
       defaultTitle: 'Study sesh',
-      allowedMinutes: 5,
-      intervalHours: 2,
+      ...fullBlockConditionFields(),
       graceSeconds: 0,
       description: 'Solo focus with minimal exceptions.',
       intensity: 'deep',
@@ -200,13 +197,13 @@ export function profileToCondition(profile: SavedSessionCondition | null | undef
   }
 
   return {
-    allowedMinutes: profile.allowedMinutes,
-    intervalHours: profile.intervalHours,
+    ...fullBlockConditionFields(),
     presetId: profile.id,
     presetLabel: profile.label,
     intensity: profile.intensity,
     description: profile.description,
     essentialAppHints: profile.essentialAppHints,
+    lockedAppLabels: [],
     shortSessionDurationMinutes: profile.shortSessionDurationMinutes,
   };
 }

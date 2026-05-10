@@ -3,10 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
 
 import { getSupabaseConfig } from '@/src/lib/supabase-config';
-import type { AuthProvider, AuthSession } from '@/src/lib/twogether-types';
+import type { AuthProvider, AuthSession } from '@/src/lib/lovelock-types';
 
-const SUPABASE_STORAGE_PREFIX = 'twogether.supabase.auth';
-const SUPABASE_EMAIL_REDIRECT_URL = 'twogether://auth';
+const SUPABASE_STORAGE_PREFIX = 'lovelock.supabase.auth';
+const SUPABASE_EMAIL_REDIRECT_URL = 'lovelock://auth';
 
 const secureStoreAdapter = {
   getItem: (key: string) => SecureStore.getItemAsync(`${SUPABASE_STORAGE_PREFIX}.${key}`),
@@ -49,7 +49,7 @@ export function getSupabaseEmailRedirectUrl() {
   return SUPABASE_EMAIL_REDIRECT_URL;
 }
 
-export function getTwogetherSupabaseClient() {
+export function getLovelockSupabaseClient() {
   if (client) {
     return client;
   }
@@ -142,14 +142,23 @@ export function mapSupabaseSession(session: Session): AuthSession {
     session.user.user_metadata.display_name.trim()
       ? session.user.user_metadata.display_name.trim()
       : typeof session.user.email === 'string' && session.user.email.includes('@')
-        ? (session.user.email.split('@')[0] ?? 'Twogether')
-        : 'Twogether';
+        ? (session.user.email.split('@')[0] ?? 'Love Lock')
+        : 'Love Lock';
+  const avatarUrl =
+    typeof session.user.user_metadata.avatar_url === 'string' &&
+    session.user.user_metadata.avatar_url.trim()
+      ? session.user.user_metadata.avatar_url.trim()
+      : typeof session.user.user_metadata.picture === 'string' &&
+          session.user.user_metadata.picture.trim()
+        ? session.user.user_metadata.picture.trim()
+        : null;
 
   return {
     userId: session.user.id,
     provider,
     email: session.user.email ?? '',
     displayName,
+    avatarUrl,
     accessToken: session.access_token,
     refreshToken: session.refresh_token,
     tokenExpiresAt: session.expires_at
@@ -165,7 +174,7 @@ export async function getSupabaseAuthSession(): Promise<AuthSession | null> {
     return null;
   }
 
-  const supabase = getTwogetherSupabaseClient();
+  const supabase = getLovelockSupabaseClient();
   const { data, error } = await supabase.auth.getSession();
 
   if (error) {
@@ -189,7 +198,7 @@ export async function consumeSupabaseAuthCallbackUrl(url: string): Promise<AuthS
     return null;
   }
 
-  const supabase = getTwogetherSupabaseClient();
+  const supabase = getLovelockSupabaseClient();
 
   if (payload.type === 'session') {
     const { data, error } = await supabase.auth.setSession({

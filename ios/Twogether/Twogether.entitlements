@@ -13,6 +13,7 @@
     <key>com.apple.security.application-groups</key>
     <array>
       <string>group.com.twogether.shared</string>
+      <string>group.com.lovelock.shared</string>
     </array>
   </dict>
 </plist>

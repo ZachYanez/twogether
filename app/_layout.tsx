@@ -12,19 +12,20 @@ import * as Linking from 'expo-linking';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 import 'react-native-reanimated';
 
 import { Colors } from '@/constants/theme';
 import { AppGate } from '@/src/components/app-gate';
 import { AppProviders } from '@/src/providers/app-providers';
+import { hasSupabaseSync } from '@/src/lib/lovelock-supabase';
 import {
-  getTwogetherSupabaseClient,
+  getLovelockSupabaseClient,
   hasSupabaseClientConfig,
   mapSupabaseSession,
 } from '@/src/lib/supabase-client';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLovelockStore } from '@/src/store/lovelock-store';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -46,6 +47,9 @@ const navigationTheme: Theme = {
   },
 };
 
+const SESSION_TIMER_STATUSES = new Set(['armed', 'active']);
+const MAX_TIMEOUT_DELAY_MS = 2_147_483_647;
+
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Manrope_400Regular,
@@ -53,19 +57,51 @@ export default function RootLayout() {
     Manrope_700Bold,
     Inter_500Medium,
   });
-  const hydrateAuthSession = useTwogetherStore((state) => state.hydrateAuthSession);
-  const consumeSupabaseAuthCallback = useTwogetherStore((state) => state.consumeSupabaseAuthCallback);
-  const syncAuthenticatedSession = useTwogetherStore((state) => state.syncAuthenticatedSession);
-  const authStatus = useTwogetherStore((state) => state.authStatus);
-  const savedPlacesCount = useTwogetherStore((state) => state.savedPlaces.length);
-  const locationAutomationEnabled = useTwogetherStore((state) => state.locationAutomationEnabled);
-  const refreshLocationAutomation = useTwogetherStore((state) => state.refreshLocationAutomation);
+  const hydrateAuthSession = useLovelockStore((state) => state.hydrateAuthSession);
+  const consumeSupabaseAuthCallback = useLovelockStore((state) => state.consumeSupabaseAuthCallback);
+  const syncAuthenticatedSession = useLovelockStore((state) => state.syncAuthenticatedSession);
+  const authStatus = useLovelockStore((state) => state.authStatus);
+  const savedPlacesCount = useLovelockStore((state) => state.savedPlaces.length);
+  const locationAutomationEnabled = useLovelockStore((state) => state.locationAutomationEnabled);
+  const refreshLocationAutomation = useLovelockStore((state) => state.refreshLocationAutomation);
+  const pulseSelfAppActivity = useLovelockStore((state) => state.pulseSelfAppActivity);
+  const sessions = useLovelockStore((state) => state.sessions);
+  const completeSession = useLovelockStore((state) => state.completeSession);
+  const completingExpiredSessionIds = useRef(new Set<string>());
 
   const onLayoutReady = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
+
+  const completeExpiredSessions = useCallback(() => {
+    const now = Date.now();
+    const expiredSessions = useLovelockStore
+      .getState()
+      .sessions
+      .filter((session) => {
+        if (!SESSION_TIMER_STATUSES.has(session.status)) {
+          return false;
+        }
+
+        const endAt = new Date(session.scheduledEndAt).getTime();
+        return Number.isFinite(endAt) && endAt <= now;
+      });
+
+    for (const session of expiredSessions) {
+      if (completingExpiredSessionIds.current.has(session.id)) {
+        continue;
+      }
+
+      completingExpiredSessionIds.current.add(session.id);
+      void completeSession(session.id)
+        .catch(() => {})
+        .finally(() => {
+          completingExpiredSessionIds.current.delete(session.id);
+        });
+    }
+  }, [completeSession]);
 
   useEffect(() => {
     let mounted = true;
@@ -97,7 +133,7 @@ export default function RootLayout() {
         void consumeSupabaseAuthCallback(url);
       });
 
-      authSubscription = getTwogetherSupabaseClient().auth.onAuthStateChange((_event, session) => {
+      authSubscription = getLovelockSupabaseClient().auth.onAuthStateChange((_event, session) => {
         if (!session) {
           return;
         }
@@ -147,6 +183,71 @@ export default function RootLayout() {
     savedPlacesCount,
   ]);
 
+  useEffect(() => {
+    if (authStatus !== 'authenticated' || !hasSupabaseSync()) {
+      return;
+    }
+
+    void pulseSelfAppActivity();
+    const interval = setInterval(() => {
+      void pulseSelfAppActivity();
+    }, 45_000);
+
+    const subscription = AppState.addEventListener('change', (nextState) => {
+      if (nextState === 'active') {
+        void pulseSelfAppActivity();
+      }
+    });
+
+    return () => {
+      clearInterval(interval);
+      subscription.remove();
+    };
+  }, [authStatus, pulseSelfAppActivity]);
+
+  useEffect(() => {
+    completeExpiredSessions();
+
+    const nextEndAt = sessions.reduce<number | null>((earliest, session) => {
+      if (!SESSION_TIMER_STATUSES.has(session.status)) {
+        return earliest;
+      }
+
+      const endAt = new Date(session.scheduledEndAt).getTime();
+      if (!Number.isFinite(endAt)) {
+        return earliest;
+      }
+
+      return earliest === null ? endAt : Math.min(earliest, endAt);
+    }, null);
+
+    if (nextEndAt === null) {
+      return;
+    }
+
+    const delay = Math.min(
+      Math.max(0, nextEndAt - Date.now() + 250),
+      MAX_TIMEOUT_DELAY_MS
+    );
+    const timeout = setTimeout(completeExpiredSessions, delay);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [completeExpiredSessions, sessions]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextState) => {
+      if (nextState === 'active') {
+        completeExpiredSessions();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [completeExpiredSessions]);
+
   if (!fontsLoaded) {
     return null;
   }
@@ -157,7 +258,7 @@ export default function RootLayout() {
         <Stack
           screenOptions={{
             animation: 'fade',
-            animationDuration: 250,
+            animationDuration: 300,
             headerShown: false,
             contentStyle: { backgroundColor: Colors.dark.background },
           }}>

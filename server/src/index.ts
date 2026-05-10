@@ -22,6 +22,7 @@ type StoredUser = {
   id: string;
   email: string;
   displayName: string;
+  avatarUrl?: string | null;
   passwordHash?: string;
   provider: AuthProvider;
   providerSubject?: string;
@@ -48,6 +49,7 @@ const registerSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
   displayName: z.string().trim().min(1).max(80).optional(),
+  avatarUrl: z.string().nullable().optional(),
 });
 
 const loginSchema = z.object({
@@ -86,6 +88,7 @@ const forgotPasswordSchema = z.object({
 
 const updateProfileSchema = z.object({
   displayName: z.string().trim().min(1).max(80),
+  avatarUrl: z.string().nullable().optional(),
 });
 
 function createId(prefix: string) {
@@ -93,7 +96,7 @@ function createId(prefix: string) {
 }
 
 function deriveDisplayNameFromEmail(email: string) {
-  return (email.split('@')[0] ?? 'Twogether')
+  return (email.split('@')[0] ?? 'Love Lock')
     .split(/[._-]/g)
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
@@ -155,6 +158,7 @@ function createSessionResponse(user: StoredUser, providerSubject?: string) {
       provider: user.provider,
       email: user.email,
       displayName: user.displayName,
+      avatarUrl: user.avatarUrl ?? null,
       accessToken: createAccessToken(user),
       refreshToken,
       tokenExpiresAt: expiresAt,
@@ -180,6 +184,7 @@ function upsertProviderUser(params: {
   providerSubject: string;
   email: string;
   displayName: string;
+  avatarUrl?: string | null;
 }) {
   const existing =
     usersByProviderSubject.get(params.providerSubject) ?? usersByEmail.get(params.email);
@@ -189,6 +194,7 @@ function upsertProviderUser(params: {
         ...existing,
         email: params.email,
         displayName: params.displayName || existing.displayName,
+        avatarUrl: params.avatarUrl ?? existing.avatarUrl ?? null,
         provider: params.provider,
         providerSubject: params.providerSubject,
       }
@@ -196,6 +202,7 @@ function upsertProviderUser(params: {
         id: createId('user'),
         email: params.email,
         displayName: params.displayName,
+        avatarUrl: params.avatarUrl ?? null,
         provider: params.provider,
         providerSubject: params.providerSubject,
         timezone: 'America/Chicago',
@@ -258,7 +265,7 @@ app.post('/auth/register', async (req, res) => {
     });
   }
 
-  const { email, password, displayName } = parsed.data;
+  const { email, password, displayName, avatarUrl } = parsed.data;
   if (usersByEmail.has(email)) {
     return res.status(409).json({
       message: 'An account with that email already exists.',
@@ -269,6 +276,7 @@ app.post('/auth/register', async (req, res) => {
     id: createId('user'),
     email,
     displayName: displayName || deriveDisplayNameFromEmail(email),
+    avatarUrl: avatarUrl ?? null,
     passwordHash: await bcrypt.hash(password, 10),
     provider: 'password',
     timezone: 'America/Chicago',
@@ -324,6 +332,7 @@ app.post('/auth/apple', (req, res) => {
     providerSubject: parsed.data.user,
     email,
     displayName,
+    avatarUrl: null,
   });
 
   return res.json(createSessionResponse(user, parsed.data.user));
@@ -347,6 +356,7 @@ app.post('/auth/google', (req, res) => {
     providerSubject: parsed.data.providerSubject,
     email: parsed.data.email,
     displayName,
+    avatarUrl: parsed.data.photo ?? null,
   });
 
   return res.json(createSessionResponse(user, parsed.data.providerSubject));
@@ -404,6 +414,7 @@ app.patch('/account/profile', authenticateRequest, (req, res) => {
   const updatedUser: StoredUser = {
     ...authUser,
     displayName: parsed.data.displayName,
+    avatarUrl: parsed.data.avatarUrl ?? authUser.avatarUrl ?? null,
   };
 
   persistUser(updatedUser);
@@ -437,5 +448,5 @@ app.delete('/account', authenticateRequest, (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Twogether auth server listening on http://localhost:${port}`);
+  console.log(`Love Lock auth server listening on http://localhost:${port}`);
 });

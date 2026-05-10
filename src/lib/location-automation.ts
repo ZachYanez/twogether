@@ -1,44 +1,90 @@
-import * as Location from 'expo-location';
-
 import type {
   LocationPermissionStatus,
   SavedPlace,
-} from '@/src/lib/twogether-types';
+} from '@/src/lib/lovelock-types';
 
 type Coordinates = {
   latitude: number;
   longitude: number;
 };
 
+type ExpoLocationModule = typeof import('expo-location');
+
+let locationModulePromise: Promise<ExpoLocationModule | null> | null = null;
+
+async function loadLocationModule() {
+  if (!locationModulePromise) {
+    locationModulePromise = import('expo-location').catch(() => null);
+  }
+
+  return locationModulePromise;
+}
+
+function createLocationUnavailableError() {
+  return new Error(
+    'Location services are unavailable in this build. Rebuild the app to enable saved-place automation.'
+  );
+}
+
 function toRadians(value: number) {
   return (value * Math.PI) / 180;
 }
 
 export function mapLocationPermissionStatus(
-  status: Location.PermissionStatus
+  status: string | null | undefined
 ): LocationPermissionStatus {
-  if (status === Location.PermissionStatus.GRANTED) {
+  if (status === 'granted') {
     return 'granted';
   }
 
-  if (status === Location.PermissionStatus.DENIED) {
+  if (status === 'denied') {
     return 'denied';
+  }
+
+  if (!status) {
+    return 'unavailable';
   }
 
   return 'unknown';
 }
 
 export async function getLocationPermissionStatus(): Promise<LocationPermissionStatus> {
-  const permission = await Location.getForegroundPermissionsAsync();
-  return mapLocationPermissionStatus(permission.status);
+  const Location = await loadLocationModule();
+
+  if (!Location) {
+    return 'unavailable';
+  }
+
+  try {
+    const permission = await Location.getForegroundPermissionsAsync();
+    return mapLocationPermissionStatus(permission.status);
+  } catch {
+    return 'unavailable';
+  }
 }
 
 export async function requestLocationPermission(): Promise<LocationPermissionStatus> {
-  const permission = await Location.requestForegroundPermissionsAsync();
-  return mapLocationPermissionStatus(permission.status);
+  const Location = await loadLocationModule();
+
+  if (!Location) {
+    return 'unavailable';
+  }
+
+  try {
+    const permission = await Location.requestForegroundPermissionsAsync();
+    return mapLocationPermissionStatus(permission.status);
+  } catch {
+    return 'unavailable';
+  }
 }
 
 export async function getCurrentCoordinates(): Promise<Coordinates> {
+  const Location = await loadLocationModule();
+
+  if (!Location) {
+    throw createLocationUnavailableError();
+  }
+
   const position = await Location.getCurrentPositionAsync({
     accuracy: Location.Accuracy.Balanced,
   });

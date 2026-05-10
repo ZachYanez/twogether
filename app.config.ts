@@ -1,7 +1,7 @@
 import type { ExpoConfig } from 'expo/config';
 
-const bundleIdentifier = 'com.twogether.app';
-const appGroup = 'group.com.twogether.shared';
+const bundleIdentifier = 'com.lovelock.app';
+const appGroup = 'group.com.lovelock.shared';
 const extensionBundleIdentifier = `${bundleIdentifier}.DeviceActivityMonitor`;
 const apiBaseUrl = process.env.EXPO_PUBLIC_API_URL;
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
@@ -18,10 +18,19 @@ const plugins: NonNullable<ExpoConfig['plugins']> = [
   'expo-dev-client',
   'expo-apple-authentication',
   [
+    'expo-image-picker',
+    {
+      photosPermission:
+        'Love Lock uses your photo library to let you choose a profile photo.',
+      cameraPermission: false,
+      microphonePermission: false,
+    },
+  ],
+  [
     'expo-location',
     {
       locationWhenInUsePermission:
-        'Twogether uses your location to detect when you are at a saved place with your partner.',
+        'Love Lock uses your location to detect when you are at a saved place with your partner.',
     },
   ],
 ];
@@ -44,7 +53,7 @@ plugins.push(
     },
   ],
   [
-    './plugins/withTwogetherIOS',
+    './plugins/withLovelockIOS',
     {
       appGroup,
       apsEnvironment: 'development',
@@ -54,10 +63,10 @@ plugins.push(
 );
 
 const config: ExpoConfig = {
-  name: 'Twogether',
-  slug: 'twogether',
+  name: 'Love Lock',
+  slug: 'love-lock',
   version: '1.0.0',
-  scheme: 'twogether',
+  scheme: 'lovelock',
   orientation: 'portrait',
   userInterfaceStyle: 'light',
   newArchEnabled: true,
@@ -73,7 +82,7 @@ const config: ExpoConfig = {
     usesAppleSignIn: true,
     infoPlist: {
       NSLocationWhenInUseUsageDescription:
-        'Twogether uses your location to detect when you are at a saved place with your partner.',
+        'Love Lock uses your location to detect when you are at a saved place with your partner.',
       UIViewControllerBasedStatusBarAppearance: false,
     },
   },
@@ -101,7 +110,7 @@ const config: ExpoConfig = {
       entitlementIdentifier: revenueCatEntitlementId,
       offeringIdentifier: revenueCatOfferingId,
     },
-    twogether: {
+    lovelock: {
       appGroup,
       extensionBundleIdentifier,
     },

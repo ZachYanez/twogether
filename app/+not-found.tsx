@@ -9,7 +9,7 @@ export default function NotFoundScreen() {
   const router = useRouter();
 
   return (
-    <ScreenShell title="Page not found">
+    <ScreenShell title="Page not found" showBackButton>
       <View style={styles.body}>
         <Text style={styles.text}>This screen doesn&apos;t exist.</Text>
         <PrimaryButton label="Go home" onPress={() => router.replace('/(tabs)')} />

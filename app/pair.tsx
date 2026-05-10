@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import {
   Animated,
+  Easing,
   Pressable,
   StyleSheet,
   Text,
@@ -9,9 +10,10 @@ import {
   View,
 } from 'react-native';
 
-import { Colors, Fonts, Layout } from '@/constants/theme';
+import { Colors, Fonts, Layout, Shadows } from '@/constants/theme';
+import { BackButton } from '@/src/components/back-button';
 import { PrimaryButton } from '@/src/components/primary-button';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLovelockStore } from '@/src/store/lovelock-store';
 
 function isValidPairContact(value: string) {
   const trimmed = value.trim();
@@ -24,41 +26,48 @@ type PairMode = 'invite' | 'join';
 
 export default function PairScreen() {
   const router = useRouter();
-  const requestPairing = useTwogetherStore((s) => s.requestPairing);
-  const joinPairingWithInviteCode = useTwogetherStore((s) => s.joinPairingWithInviteCode);
+  const requestPairing = useLovelockStore((s) => s.requestPairing);
+  const joinPairingWithInviteCode = useLovelockStore((s) => s.joinPairingWithInviteCode);
   const [mode, setMode] = useState<PairMode>('invite');
   const [partnerName, setPartnerName] = useState('');
   const [contact, setContact] = useState('');
   const [inviteCode, setInviteCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const titleTranslateY = useRef(new Animated.Value(-36)).current;
+
+  const titleTranslateY = useRef(new Animated.Value(24)).current;
   const titleOpacity = useRef(new Animated.Value(0)).current;
-  const formTranslateY = useRef(new Animated.Value(16)).current;
+  const formTranslateY = useRef(new Animated.Value(20)).current;
   const formOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.parallel([
-      Animated.timing(titleTranslateY, {
-        toValue: 0,
-        duration: 650,
-        useNativeDriver: true,
-      }),
-      Animated.timing(titleOpacity, {
-        toValue: 1,
-        duration: 650,
-        useNativeDriver: true,
-      }),
-      Animated.timing(formTranslateY, {
-        toValue: 0,
-        duration: 450,
-        useNativeDriver: true,
-      }),
-      Animated.timing(formOpacity, {
-        toValue: 1,
-        duration: 450,
-        useNativeDriver: true,
-      }),
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(titleTranslateY, {
+          toValue: 0,
+          duration: 700,
+          easing: Easing.out(Easing.cubic),
+          useNativeDriver: true,
+        }),
+        Animated.timing(titleOpacity, {
+          toValue: 1,
+          duration: 700,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.parallel([
+        Animated.timing(formTranslateY, {
+          toValue: 0,
+          duration: 500,
+          easing: Easing.out(Easing.cubic),
+          useNativeDriver: true,
+        }),
+        Animated.timing(formOpacity, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ]),
     ]).start();
   }, [formOpacity, formTranslateY, titleOpacity, titleTranslateY]);
 
@@ -129,14 +138,22 @@ export default function PairScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.orbPrimary} />
+      <View style={styles.orbSecondary} />
+      <View style={styles.backWrap}>
+        <BackButton />
+      </View>
+
       <View style={styles.center}>
         <Animated.View
           style={{
             opacity: titleOpacity,
             transform: [{ translateY: titleTranslateY }],
           }}>
-          <Text style={styles.title}>Pair</Text>
+          <Text style={styles.title}>Pair up</Text>
+          <Text style={styles.subtitle}>Connect with someone for shared focus time.</Text>
         </Animated.View>
+
         <Animated.View
           style={[
             styles.card,
@@ -196,7 +213,7 @@ export default function PairScreen() {
               <Pressable
                 disabled={submitting}
                 onPress={() => toggleMode('join')}
-                style={({ pressed }) => [pressed ? styles.linkPressed : null]}>
+                style={({ pressed }) => [styles.linkWrap, pressed && styles.linkPressed]}>
                 <Text style={styles.link}>My partner already has an account</Text>
               </Pressable>
             </>
@@ -221,7 +238,7 @@ export default function PairScreen() {
                   placeholder="Invite code"
                   placeholderTextColor={Colors.dark.textTertiary}
                   returnKeyType="done"
-                  style={styles.input}
+                  style={[styles.input, styles.codeInput]}
                 />
               </View>
               <PrimaryButton
@@ -234,7 +251,7 @@ export default function PairScreen() {
               <Pressable
                 disabled={submitting}
                 onPress={() => toggleMode('invite')}
-                style={({ pressed }) => [pressed ? styles.linkPressed : null]}>
+                style={({ pressed }) => [styles.linkWrap, pressed && styles.linkPressed]}>
                 <Text style={styles.link}>I&apos;m inviting someone new</Text>
               </Pressable>
             </>
@@ -247,20 +264,34 @@ export default function PairScreen() {
 }
 
 const styles = StyleSheet.create({
+  backWrap: {
+    left: 24,
+    position: 'absolute',
+    top: 60,
+    zIndex: 2,
+  },
   card: {
-    backgroundColor: Colors.dark.surface,
+    backgroundColor: Colors.dark.card,
     borderColor: Colors.dark.border,
-    borderRadius: Layout.radiusLg,
+    borderRadius: Layout.radiusXl,
     borderWidth: 1,
-    gap: 16,
-    padding: 20,
+    gap: 18,
+    padding: 24,
     width: '100%',
+    ...Shadows.md,
   },
   center: {
     alignItems: 'center',
-    gap: 20,
-    paddingHorizontal: 28,
+    gap: 28,
+    paddingHorizontal: 24,
     width: '100%',
+  },
+  codeInput: {
+    fontFamily: Fonts.rounded,
+    fontSize: 20,
+    fontWeight: '600',
+    letterSpacing: 4,
+    textAlign: 'center',
   },
   container: {
     alignItems: 'center',
@@ -276,19 +307,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     textAlign: 'center',
   },
-  input: {
-    backgroundColor: Colors.dark.background,
-    borderColor: Colors.dark.border,
-    borderRadius: 18,
-    borderWidth: 1,
-    color: Colors.dark.text,
-    fontFamily: Fonts.body,
-    fontSize: 17,
-    fontWeight: '400',
-    minHeight: 58,
-    paddingHorizontal: 20,
-    width: '100%',
-  },
   hint: {
     color: Colors.dark.textSecondary,
     fontFamily: Fonts.body,
@@ -297,26 +315,70 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     textAlign: 'center',
   },
+  input: {
+    backgroundColor: Colors.dark.surfaceElevated,
+    borderColor: Colors.dark.border,
+    borderRadius: Layout.radiusMd,
+    borderWidth: 1,
+    color: Colors.dark.text,
+    fontFamily: Fonts.body,
+    fontSize: 17,
+    fontWeight: '400',
+    minHeight: 52,
+    paddingHorizontal: 18,
+    width: '100%',
+  },
   inputWrap: {
-    gap: 14,
+    gap: 12,
     width: '100%',
   },
   link: {
-    color: Colors.dark.textSecondary,
+    color: Colors.dark.accentMuted,
     fontFamily: Fonts.bodyMedium,
     fontSize: 15,
     fontWeight: '600',
     textAlign: 'center',
   },
   linkPressed: {
-    opacity: 0.7,
+    opacity: 0.6,
+  },
+  linkWrap: {
+    paddingVertical: 4,
+  },
+  orbPrimary: {
+    backgroundColor: 'rgba(93, 26, 26, 0.05)',
+    borderRadius: 999,
+    height: 280,
+    position: 'absolute',
+    right: -80,
+    top: -40,
+    width: 280,
+  },
+  orbSecondary: {
+    backgroundColor: 'rgba(217, 197, 178, 0.18)',
+    borderRadius: 999,
+    bottom: -80,
+    height: 240,
+    left: -60,
+    position: 'absolute',
+    width: 240,
+  },
+  subtitle: {
+    color: Colors.dark.textSecondary,
+    fontFamily: Fonts.body,
+    fontSize: 17,
+    fontWeight: '400',
+    letterSpacing: 0.1,
+    lineHeight: 26,
+    marginTop: 8,
+    textAlign: 'center',
   },
   title: {
     color: Colors.dark.text,
     fontFamily: Fonts.display,
-    fontSize: 44,
+    fontSize: 40,
     fontWeight: '700',
-    letterSpacing: 0.4,
+    letterSpacing: -0.4,
     textAlign: 'center',
   },
 });

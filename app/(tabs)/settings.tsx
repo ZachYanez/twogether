@@ -2,31 +2,33 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { Colors, Fonts, Layout } from '@/constants/theme';
+import { ImmersiveText } from '@/constants/immersive-text';
+import { Colors, Fonts, Layout, Shadows } from '@/constants/theme';
+import { FrostedCard } from '@/src/components/frosted-card';
 import { PrimaryButton } from '@/src/components/primary-button';
 import { ScreenShell } from '@/src/components/screen-shell';
-import { getAuthorizationStatus, getLocalShieldState } from '@/src/lib/twogether-shield';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { getAuthorizationStatus, getLocalShieldState } from '@/src/lib/lovelock-shield';
+import { useLovelockStore } from '@/src/store/lovelock-store';
 
 export default function SettingsScreen() {
   const router = useRouter();
   const placesRoute = '/places' as Parameters<typeof router.push>[0];
-  const partner = useTwogetherStore((s) => s.partner);
-  const couple = useTwogetherStore((s) => s.couple);
-  const authSession = useTwogetherStore((s) => s.authSession);
-  const subscriptionStatus = useTwogetherStore((s) => s.subscriptionStatus);
-  const effectiveSubscriptionAccess = useTwogetherStore((s) => s.effectiveSubscriptionAccess);
-  const savedPlaces = useTwogetherStore((s) => s.savedPlaces);
-  const locationPermissionStatus = useTwogetherStore((s) => s.locationPermissionStatus);
-  const locationAutomationEnabled = useTwogetherStore((s) => s.locationAutomationEnabled);
-  const locationAutomationMode = useTwogetherStore((s) => s.locationAutomationMode);
-  const locationBusy = useTwogetherStore((s) => s.locationBusy);
-  const resetDemo = useTwogetherStore((s) => s.resetDemo);
-  const signOut = useTwogetherStore((s) => s.signOut);
-  const requestPairing = useTwogetherStore((s) => s.requestPairing);
-  const requestLocationPermission = useTwogetherStore((s) => s.requestLocationPermission);
-  const setLocationAutomationSettings = useTwogetherStore((s) => s.setLocationAutomationSettings);
-  const refreshLocationAutomation = useTwogetherStore((s) => s.refreshLocationAutomation);
+  const partner = useLovelockStore((s) => s.partner);
+  const couple = useLovelockStore((s) => s.couple);
+  const authSession = useLovelockStore((s) => s.authSession);
+  const subscriptionStatus = useLovelockStore((s) => s.subscriptionStatus);
+  const effectiveSubscriptionAccess = useLovelockStore((s) => s.effectiveSubscriptionAccess);
+  const savedPlaces = useLovelockStore((s) => s.savedPlaces);
+  const locationPermissionStatus = useLovelockStore((s) => s.locationPermissionStatus);
+  const locationAutomationEnabled = useLovelockStore((s) => s.locationAutomationEnabled);
+  const locationAutomationMode = useLovelockStore((s) => s.locationAutomationMode);
+  const locationBusy = useLovelockStore((s) => s.locationBusy);
+  const resetDemo = useLovelockStore((s) => s.resetDemo);
+  const signOut = useLovelockStore((s) => s.signOut);
+  const requestPairing = useLovelockStore((s) => s.requestPairing);
+  const requestLocationPermission = useLovelockStore((s) => s.requestLocationPermission);
+  const setLocationAutomationSettings = useLovelockStore((s) => s.setLocationAutomationSettings);
+  const refreshLocationAutomation = useLovelockStore((s) => s.refreshLocationAutomation);
   const [nativeStatus, setNativeStatus] = useState('loading');
   const [shieldState, setShieldState] = useState('loading');
   const [inviteContact, setInviteContact] = useState('');
@@ -55,14 +57,17 @@ export default function SettingsScreen() {
   }
 
   return (
-    <ScreenShell title="Settings">
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Invite</Text>
-        <Text style={styles.inviteHint}>
+    <ScreenShell immersive showMenuButton title="Settings">
+      <FrostedCard innerStyle={styles.inviteCard}>
+        <Text style={styles.cardTitle}>Invite</Text>
+        <Text style={styles.cardBody}>
           Send an invite to someone you&apos;d like to pair with.
         </Text>
         {inviteSent ? (
-          <Text style={styles.inviteSent}>Invite sent!</Text>
+          <View style={styles.successBadge}>
+            <View style={styles.successDot} />
+            <Text style={styles.successText}>Invite sent!</Text>
+          </View>
         ) : null}
         <TextInput
           value={inviteContact}
@@ -72,45 +77,45 @@ export default function SettingsScreen() {
           keyboardType="email-address"
           onSubmitEditing={() => { void sendInvite(); }}
           placeholder="Phone number or email"
-          placeholderTextColor={Colors.dark.textTertiary}
+          placeholderTextColor={ImmersiveText.muted}
           returnKeyType="send"
-          style={styles.inviteInput}
+          style={styles.input}
         />
         <PrimaryButton label="Send invite" onPress={() => { void sendInvite(); }} />
-      </View>
+      </FrostedCard>
 
-      <View style={styles.divider} />
+      <FrostedCard innerStyle={styles.cardInner}>
+        <Text style={styles.cardTitle}>Account</Text>
+        <View style={styles.rowGroup}>
+          <Row label="Email" value={authSession?.email ?? 'N/A'} />
+          <Row
+            label="Subscription"
+            value={
+              effectiveSubscriptionAccess.source === 'partner'
+                ? `Via ${effectiveSubscriptionAccess.ownerDisplayName ?? 'partner'}`
+                : subscriptionStatus
+            }
+          />
+          <Row label="Partner" value={partner?.displayName ?? 'Not paired'} />
+        </View>
+      </FrostedCard>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account</Text>
-        <Row label="Email" value={authSession?.email ?? 'N/A'} />
-        <Row
-          label="Subscription"
-          value={
-            effectiveSubscriptionAccess.source === 'partner'
-              ? `Included via ${effectiveSubscriptionAccess.ownerDisplayName ?? 'partner'}`
-              : subscriptionStatus
-          }
-        />
-        <Row label="Partner" value={partner?.displayName ?? 'Not paired'} />
-      </View>
-
-      <View style={styles.divider} />
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Saved places</Text>
+      <FrostedCard innerStyle={styles.cardInner}>
+        <Text style={styles.cardTitle}>Saved places</Text>
         {automationAvailable ? (
           <>
-            <Text style={styles.inviteHint}>
+            <Text style={styles.cardBody}>
               Detect when you and {partner?.displayName ?? 'your partner'} are at the same saved
               place.
             </Text>
-            <Row label="Places" value={`${savedPlaces.length}`} />
-            <Row label="Location" value={locationPermissionStatus} />
-            <Row
-              label="Mode"
-              value={locationAutomationEnabled ? locationAutomationMode.replace('_', ' ') : 'off'}
-            />
+            <View style={styles.rowGroup}>
+              <Row label="Places" value={`${savedPlaces.length}`} />
+              <Row label="Location" value={locationPermissionStatus} />
+              <Row
+                label="Mode"
+                value={locationAutomationEnabled ? locationAutomationMode.replace('_', ' ') : 'Off'}
+              />
+            </View>
             <View style={styles.segmentRow}>
               {(['suggest', 'auto_arm'] as const).map((mode) => {
                 const selected = locationAutomationMode === mode;
@@ -131,12 +136,12 @@ export default function SettingsScreen() {
                 );
               })}
             </View>
-            <View style={styles.actions}>
+            <View style={styles.buttonGroup}>
               <PrimaryButton
                 label={
                   locationAutomationEnabled
-                    ? 'Turn off saved-place automation'
-                    : 'Turn on saved-place automation'
+                    ? 'Turn off automation'
+                    : 'Turn on automation'
                 }
                 secondary={locationAutomationEnabled}
                 loading={locationBusy}
@@ -148,12 +153,12 @@ export default function SettingsScreen() {
                 }}
               />
               <PrimaryButton
-                label="Manage saved places"
+                label="Manage places"
                 secondary
                 onPress={() => router.push(placesRoute)}
               />
               <PrimaryButton
-                label="Refresh place check-in"
+                label="Refresh check-in"
                 secondary
                 loading={locationBusy}
                 onPress={() => {
@@ -172,23 +177,21 @@ export default function SettingsScreen() {
             </View>
           </>
         ) : (
-          <Text style={styles.inviteHint}>
+          <Text style={styles.cardBody}>
             Pair with an active partner before turning on saved-place automation.
           </Text>
         )}
-      </View>
+      </FrostedCard>
 
-      <View style={styles.divider} />
+      <FrostedCard innerStyle={styles.cardInner}>
+        <Text style={styles.cardTitle}>Device</Text>
+        <View style={styles.rowGroup}>
+          <Row label="Screen Time" value={nativeStatus} />
+          <Row label="Shield" value={shieldState} />
+        </View>
+      </FrostedCard>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Device</Text>
-        <Row label="Screen Time" value={nativeStatus} />
-        <Row label="Shield" value={shieldState} />
-      </View>
-
-      <View style={styles.divider} />
-
-      <View style={styles.actions}>
+      <View style={styles.buttonGroup}>
         <PrimaryButton label="Account & billing" onPress={() => router.push('/account')} />
         <PrimaryButton label="Authorization" secondary onPress={() => router.push('/authorization')} />
         <PrimaryButton label="Choose apps" secondary onPress={() => router.push('/selection')} />
@@ -223,34 +226,84 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 const styles = StyleSheet.create({
-  actions: { gap: 8 },
-  inviteHint: {
-    color: Colors.dark.textSecondary,
+  buttonGroup: { gap: 8 },
+  cardBody: {
+    color: ImmersiveText.secondary,
     fontFamily: Fonts.body,
     fontSize: 14,
     fontWeight: '400',
-    lineHeight: 20,
-    marginBottom: 10,
+    lineHeight: 21,
+  },
+  cardInner: {
+    gap: 14,
+    paddingHorizontal: 18,
+    paddingVertical: 18,
+  },
+  cardTitle: {
+    color: ImmersiveText.primary,
+    fontFamily: Fonts.display,
+    fontSize: 20,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+    marginBottom: 4,
+  },
+  input: {
+    backgroundColor: ImmersiveText.inputBg,
+    borderColor: ImmersiveText.inputBorder,
+    borderRadius: Layout.radiusMd,
+    borderWidth: 1,
+    color: ImmersiveText.primary,
+    fontFamily: Fonts.body,
+    fontSize: 16,
+    fontWeight: '400',
+    minHeight: 52,
+    paddingHorizontal: 18,
+  },
+  inviteCard: {
+    gap: 12,
+    paddingHorizontal: 18,
+    paddingVertical: 18,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 11,
+  },
+  rowGroup: {
+    borderTopColor: ImmersiveText.divider,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    marginTop: 4,
+  },
+  rowLabel: {
+    color: ImmersiveText.primary,
+    fontFamily: Fonts.body,
+    fontSize: 16,
+    fontWeight: '400',
+  },
+  rowValue: {
+    color: ImmersiveText.tertiary,
+    fontFamily: Fonts.body,
+    fontSize: 16,
+    fontWeight: '400',
+    textTransform: 'capitalize',
   },
   segment: {
     borderRadius: Layout.radiusSm,
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 11,
   },
   segmentActive: {
     backgroundColor: Colors.dark.accent,
+    ...Shadows.sm,
   },
   segmentRow: {
-    backgroundColor: Colors.dark.surface,
-    borderColor: Colors.dark.border,
+    backgroundColor: ImmersiveText.segmentTrack,
     borderRadius: Layout.radiusSm,
-    borderWidth: 1,
     flexDirection: 'row',
-    marginBottom: 10,
     padding: 3,
   },
   segmentText: {
-    color: Colors.dark.textSecondary,
+    color: ImmersiveText.tertiary,
     fontFamily: Fonts.bodyMedium,
     fontSize: 15,
     fontWeight: '600',
@@ -259,56 +312,21 @@ const styles = StyleSheet.create({
   segmentTextActive: {
     color: '#FFFFFF',
   },
-  inviteInput: {
-    backgroundColor: Colors.dark.surface,
-    borderColor: Colors.dark.border,
-    borderRadius: 14,
-    borderWidth: 1,
-    color: Colors.dark.text,
-    fontFamily: Fonts.body,
-    fontSize: 16,
-    fontWeight: '400',
-    marginBottom: 10,
-    minHeight: 52,
-    paddingHorizontal: 16,
-  },
-  inviteSent: {
-    color: Colors.dark.success,
-    fontFamily: Fonts.body,
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 6,
-  },
-  divider: {
-    backgroundColor: Colors.dark.border,
-    height: StyleSheet.hairlineWidth,
-  },
-  row: {
+  successBadge: {
+    alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
+    gap: 6,
   },
-  rowLabel: {
-    color: Colors.dark.text,
-    fontFamily: Fonts.body,
-    fontSize: 17,
-    fontWeight: '400',
+  successDot: {
+    backgroundColor: Colors.dark.success,
+    borderRadius: 999,
+    height: 6,
+    width: 6,
   },
-  rowValue: {
-    color: Colors.dark.textSecondary,
-    fontFamily: Fonts.body,
-    fontSize: 17,
-    fontWeight: '400',
-    textTransform: 'capitalize',
-  },
-  section: { gap: 0 },
-  sectionTitle: {
-    color: Colors.dark.textSecondary,
-    fontFamily: Fonts.body,
-    fontSize: 13,
-    fontWeight: '500',
-    letterSpacing: 1,
-    marginBottom: 4,
-    textTransform: 'uppercase',
+  successText: {
+    color: '#C8F5D4',
+    fontFamily: Fonts.bodyMedium,
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

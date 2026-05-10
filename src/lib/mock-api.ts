@@ -1,4 +1,4 @@
-import type { DashboardData, Session } from '@/src/lib/twogether-types';
+import type { DashboardData, Session } from '@/src/lib/lovelock-types';
 
 type DashboardSource = {
   authorizationStatus: string;
@@ -53,11 +53,11 @@ export async function fetchDashboard(source: DashboardSource): Promise<Dashboard
       headline:
         score === 100
           ? 'Both phones are ready for the next session.'
-          : 'There is still setup work before Twogether can shield apps on-device.',
+          : 'There is still setup work before Love Lock can shield apps on-device.',
       body:
         score === 100
           ? 'The shared session can arm locally on each iPhone and activate at the scheduled interval.'
-          : 'Twogether coordinates the agreement remotely, but each device must be individually authorized and configured.',
+          : 'Love Lock coordinates the agreement remotely, but each device must be individually authorized and configured.',
       steps,
     },
     primarySession,

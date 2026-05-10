@@ -1,16 +1,17 @@
 import { getApiBaseUrl } from '@/src/lib/api-config';
 import {
   getSupabaseEmailRedirectUrl,
-  getTwogetherSupabaseClient,
+  getLovelockSupabaseClient,
   hasSupabaseClientConfig,
   mapSupabaseSession,
 } from '@/src/lib/supabase-client';
-import type { AuthProvider, AuthSession } from '@/src/lib/twogether-types';
+import type { AuthProvider, AuthSession } from '@/src/lib/lovelock-types';
 
 type PasswordAuthPayload = {
   email: string;
   password: string;
   displayName?: string;
+  avatarUrl?: string | null;
 };
 
 type AppleExchangePayload = {
@@ -58,6 +59,7 @@ type PasswordResetResponse = {
 
 type AccountProfilePayload = {
   displayName: string;
+  avatarUrl?: string | null;
 };
 
 type AccountProfileResponse = {
@@ -83,7 +85,7 @@ function createUserId(prefix: AuthProvider, unique: string) {
 }
 
 function createDisplayNameFromEmail(email: string) {
-  const local = email.split('@')[0] ?? 'Twogether';
+  const local = email.split('@')[0] ?? 'Love Lock';
   return local
     .split(/[._-]/g)
     .filter(Boolean)
@@ -95,6 +97,7 @@ function createLocalSession(params: {
   provider: AuthProvider;
   email: string;
   displayName: string;
+  avatarUrl?: string | null;
   providerSubject?: string;
 }): AuthSession {
   return {
@@ -102,6 +105,7 @@ function createLocalSession(params: {
     provider: params.provider,
     email: params.email,
     displayName: params.displayName,
+    avatarUrl: params.avatarUrl ?? null,
     accessToken: createOpaqueToken(params.provider),
     refreshToken: createOpaqueToken('password'),
     tokenExpiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
@@ -168,13 +172,14 @@ function hasBackend() {
 async function registerWithSupabase(
   payload: PasswordAuthPayload
 ): Promise<PasswordRegistrationResponse> {
-  const supabase = getTwogetherSupabaseClient();
+  const supabase = getLovelockSupabaseClient();
   const { data, error } = await supabase.auth.signUp({
     email: payload.email,
     password: payload.password,
     options: {
       data: {
         display_name: payload.displayName || createDisplayNameFromEmail(payload.email),
+        avatar_url: payload.avatarUrl ?? null,
       },
       emailRedirectTo: getSupabaseEmailRedirectUrl(),
     },
@@ -196,7 +201,7 @@ async function registerWithSupabase(
 }
 
 async function loginWithSupabase(payload: PasswordAuthPayload): Promise<AuthSessionResponse> {
-  const supabase = getTwogetherSupabaseClient();
+  const supabase = getLovelockSupabaseClient();
   const { data, error } = await supabase.auth.signInWithPassword({
     email: payload.email,
     password: payload.password,
@@ -234,6 +239,7 @@ export async function registerWithPassword(
       provider: 'password',
       email: payload.email,
       displayName: payload.displayName || createDisplayNameFromEmail(payload.email),
+      avatarUrl: payload.avatarUrl ?? null,
     }),
   };
 }
@@ -254,6 +260,7 @@ export async function loginWithPassword(
       provider: 'password',
       email: payload.email,
       displayName: payload.displayName || createDisplayNameFromEmail(payload.email),
+      avatarUrl: null,
     }),
   };
 }
@@ -277,6 +284,7 @@ export async function exchangeAppleSession(
       provider: 'apple',
       email: fallbackEmail,
       displayName: displayName || 'Apple User',
+      avatarUrl: null,
       providerSubject: payload.user,
     }),
   };
@@ -298,6 +306,7 @@ export async function exchangeGoogleSession(
       provider: 'google',
       email: payload.email,
       displayName: payload.name || createDisplayNameFromEmail(payload.email),
+      avatarUrl: payload.photo ?? null,
       providerSubject: payload.providerSubject,
     }),
   };
@@ -309,7 +318,7 @@ export async function logoutSession(session: AuthSession | null) {
   }
 
   if (hasSupabaseClientConfig()) {
-    const supabase = getTwogetherSupabaseClient();
+    const supabase = getLovelockSupabaseClient();
     const { error } = await supabase.auth.signOut();
     assertSupabaseError(error);
     return;
@@ -332,7 +341,7 @@ export async function requestPasswordReset(
   payload: PasswordResetPayload
 ): Promise<PasswordResetResponse> {
   if (hasSupabaseClientConfig()) {
-    const supabase = getTwogetherSupabaseClient();
+    const supabase = getLovelockSupabaseClient();
     const { error } = await supabase.auth.resetPasswordForEmail(payload.email);
     assertSupabaseError(error);
 
@@ -357,10 +366,11 @@ export async function updateAccountProfile(
   payload: AccountProfilePayload
 ): Promise<AccountProfileResponse> {
   if (hasSupabaseClientConfig()) {
-    const supabase = getTwogetherSupabaseClient();
+    const supabase = getLovelockSupabaseClient();
     const { error: authError } = await supabase.auth.updateUser({
       data: {
         display_name: payload.displayName,
+        avatar_url: payload.avatarUrl ?? session.avatarUrl ?? null,
       },
     });
     assertSupabaseError(authError);
@@ -369,6 +379,7 @@ export async function updateAccountProfile(
       {
         id: session.userId,
         display_name: payload.displayName,
+        avatar_path: payload.avatarUrl ?? session.avatarUrl ?? null,
         timezone: 'America/Chicago',
       },
       {
@@ -388,6 +399,7 @@ export async function updateAccountProfile(
       session: {
         ...mapSupabaseSession(data.session),
         displayName: payload.displayName,
+        avatarUrl: payload.avatarUrl ?? session.avatarUrl ?? null,
       },
     };
   }
@@ -405,6 +417,7 @@ export async function updateAccountProfile(
     session: {
       ...session,
       displayName: payload.displayName,
+      avatarUrl: payload.avatarUrl ?? session.avatarUrl ?? null,
     },
   };
 }

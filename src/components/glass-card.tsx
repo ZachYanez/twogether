@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
-import { Colors, Layout } from '@/constants/theme';
+import { Colors, Layout, Shadows } from '@/constants/theme';
 
 export function GlassCard({
   children,
@@ -12,9 +12,12 @@ export function GlassCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.dark.surface,
+    backgroundColor: Colors.dark.card,
+    borderColor: Colors.dark.border,
     borderRadius: Layout.radiusLg,
+    borderWidth: 1,
     overflow: 'hidden',
-    padding: 16,
+    padding: 18,
+    ...Shadows.sm,
   },
 });

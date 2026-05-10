@@ -3,13 +3,14 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { Colors, Fonts, Layout } from '@/constants/theme';
+import { Colors, Fonts, Layout, Shadows } from '@/constants/theme';
+import { GlassCard } from '@/src/components/glass-card';
 import { PrimaryButton } from '@/src/components/primary-button';
 import { ScreenShell } from '@/src/components/screen-shell';
 import {
   presentRevenueCatCustomerCenter,
 } from '@/src/lib/revenuecat';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLovelockStore } from '@/src/store/lovelock-store';
 
 function formatDate(value: string | null) {
   return value ? format(new Date(value), 'MMM d, yyyy') : 'N/A';
@@ -17,17 +18,17 @@ function formatDate(value: string | null) {
 
 export default function AccountScreen() {
   const router = useRouter();
-  const authSession = useTwogetherStore((s) => s.authSession);
-  const currentUser = useTwogetherStore((s) => s.currentUser);
-  const effectiveSubscriptionAccess = useTwogetherStore((s) => s.effectiveSubscriptionAccess);
-  const subscriptionStatus = useTwogetherStore((s) => s.subscriptionStatus);
-  const subscriptionExpiresAt = useTwogetherStore((s) => s.subscriptionExpiresAt);
-  const updateAccountDisplayName = useTwogetherStore((s) => s.updateAccountDisplayName);
-  const requestPasswordReset = useTwogetherStore((s) => s.requestPasswordReset);
-  const restoreSubscriptionPurchases = useTwogetherStore((s) => s.restoreSubscriptionPurchases);
-  const syncSubscriptionState = useTwogetherStore((s) => s.syncSubscriptionState);
-  const signOut = useTwogetherStore((s) => s.signOut);
-  const deleteAccount = useTwogetherStore((s) => s.deleteAccount);
+  const authSession = useLovelockStore((s) => s.authSession);
+  const currentUser = useLovelockStore((s) => s.currentUser);
+  const effectiveSubscriptionAccess = useLovelockStore((s) => s.effectiveSubscriptionAccess);
+  const subscriptionStatus = useLovelockStore((s) => s.subscriptionStatus);
+  const subscriptionExpiresAt = useLovelockStore((s) => s.subscriptionExpiresAt);
+  const updateAccountDisplayName = useLovelockStore((s) => s.updateAccountDisplayName);
+  const requestPasswordReset = useLovelockStore((s) => s.requestPasswordReset);
+  const restoreSubscriptionPurchases = useLovelockStore((s) => s.restoreSubscriptionPurchases);
+  const syncSubscriptionState = useLovelockStore((s) => s.syncSubscriptionState);
+  const signOut = useLovelockStore((s) => s.signOut);
+  const deleteAccount = useLovelockStore((s) => s.deleteAccount);
   const [displayName, setDisplayName] = useState(currentUser?.displayName ?? '');
   const [busyAction, setBusyAction] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -48,9 +49,9 @@ export default function AccountScreen() {
   }
 
   return (
-    <ScreenShell title="Account">
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Profile</Text>
+    <ScreenShell title="Account" showBackButton>
+      <GlassCard style={styles.profileCard}>
+        <Text style={styles.cardTitle}>Profile</Text>
         <TextInput
           value={displayName}
           onChangeText={setDisplayName}
@@ -58,7 +59,7 @@ export default function AccountScreen() {
           placeholderTextColor={Colors.dark.textTertiary}
           style={styles.input}
         />
-        <View style={styles.detail}>
+        <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Email</Text>
           <Text style={styles.detailValue}>{authSession?.email ?? 'N/A'}</Text>
         </View>
@@ -72,21 +73,19 @@ export default function AccountScreen() {
             })
           }
         />
-      </View>
+      </GlassCard>
 
-      <View style={styles.divider} />
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Billing</Text>
-        <View style={styles.detail}>
+      <GlassCard>
+        <Text style={styles.cardTitle}>Billing</Text>
+        <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Status</Text>
           <Text style={styles.detailValue}>
             {effectiveSubscriptionAccess.source === 'partner'
-              ? `Included via ${effectiveSubscriptionAccess.ownerDisplayName ?? 'partner'}`
+              ? `Via ${effectiveSubscriptionAccess.ownerDisplayName ?? 'partner'}`
               : subscriptionStatus}
           </Text>
         </View>
-        <View style={styles.detail}>
+        <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Expires</Text>
           <Text style={styles.detailValue}>
             {formatDate(
@@ -97,7 +96,7 @@ export default function AccountScreen() {
           </Text>
         </View>
         {effectiveSubscriptionAccess.source !== 'partner' ? (
-          <>
+          <View style={styles.buttonGroup}>
             <PrimaryButton
               label="Billing center"
               secondary
@@ -120,16 +119,19 @@ export default function AccountScreen() {
                 })
               }
             />
-          </>
+          </View>
         ) : null}
-      </View>
+      </GlassCard>
 
-      <View style={styles.divider} />
-
-      {notice ? <Text style={styles.notice}>{notice}</Text> : null}
+      {notice ? (
+        <View style={styles.noticeBadge}>
+          <View style={styles.noticeDot} />
+          <Text style={styles.noticeText}>{notice}</Text>
+        </View>
+      ) : null}
       {error ? <Text style={styles.error}>{error}</Text> : null}
 
-      <View style={styles.section}>
+      <View style={styles.buttonGroup}>
         {canResetPassword ? (
           <PrimaryButton
             label="Reset password"
@@ -181,10 +183,14 @@ export default function AccountScreen() {
 }
 
 const styles = StyleSheet.create({
-  detail: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 6,
+  buttonGroup: { gap: 8 },
+  cardTitle: {
+    color: Colors.dark.text,
+    fontFamily: Fonts.display,
+    fontSize: 20,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+    marginBottom: 4,
   },
   detailLabel: {
     color: Colors.dark.textSecondary,
@@ -192,15 +198,18 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '400',
   },
+  detailRow: {
+    borderTopColor: Colors.dark.border,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 11,
+  },
   detailValue: {
     color: Colors.dark.text,
     fontFamily: Fonts.body,
     fontSize: 15,
     fontWeight: '400',
-  },
-  divider: {
-    backgroundColor: Colors.dark.border,
-    height: StyleSheet.hairlineWidth,
   },
   error: {
     color: Colors.dark.danger,
@@ -209,27 +218,36 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   input: {
-    backgroundColor: Colors.dark.surface,
+    backgroundColor: Colors.dark.surfaceElevated,
+    borderColor: Colors.dark.border,
     borderRadius: Layout.radiusMd,
+    borderWidth: 1,
     color: Colors.dark.text,
     fontFamily: Fonts.body,
     fontSize: 17,
     fontWeight: '400',
-    minHeight: 50,
-    paddingHorizontal: 16,
+    minHeight: 52,
+    paddingHorizontal: 18,
     paddingVertical: 14,
   },
-  notice: {
-    color: Colors.dark.success,
-    fontFamily: Fonts.body,
-    fontSize: 15,
-    fontWeight: '400',
+  noticeBadge: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
   },
-  section: { gap: 10 },
-  sectionTitle: {
-    color: Colors.dark.text,
+  noticeDot: {
+    backgroundColor: Colors.dark.success,
+    borderRadius: 999,
+    height: 6,
+    width: 6,
+  },
+  noticeText: {
+    color: Colors.dark.success,
     fontFamily: Fonts.bodyMedium,
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  profileCard: {
+    gap: 12,
   },
 });

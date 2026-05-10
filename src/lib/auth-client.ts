@@ -14,12 +14,13 @@ import {
   updateAccountProfile as updateAccountProfileRequest,
 } from '@/src/lib/auth-api';
 import { consumeSupabaseAuthCallbackUrl } from '@/src/lib/supabase-client';
-import type { AuthSession } from '@/src/lib/twogether-types';
+import type { AuthSession } from '@/src/lib/lovelock-types';
 
 type EmailPasswordCredentials = {
   email: string;
   password: string;
   displayName?: string;
+  avatarUrl?: string | null;
 };
 
 type AuthConfig = {
@@ -37,7 +38,7 @@ function getAuthConfig(): AuthConfig {
 }
 
 function createDisplayNameFromEmail(email: string) {
-  const local = email.split('@')[0] ?? 'Twogether';
+  const local = email.split('@')[0] ?? 'Love Lock';
   return local
     .split(/[._-]/g)
     .filter(Boolean)
@@ -61,6 +62,7 @@ function normalizeEmailPassword(credentials: EmailPasswordCredentials) {
     email,
     password,
     displayName: credentials.displayName?.trim() || createDisplayNameFromEmail(email),
+    avatarUrl: credentials.avatarUrl ?? null,
   };
 }
 
@@ -183,6 +185,7 @@ export async function updateAccountProfile(
   session: AuthSession,
   payload: {
     displayName: string;
+    avatarUrl?: string | null;
   }
 ) {
   return updateAccountProfileRequest(session, payload);

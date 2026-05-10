@@ -2,25 +2,26 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { Colors, Fonts, Layout } from '@/constants/theme';
+import { Colors, Fonts, Layout, Shadows } from '@/constants/theme';
+import { GlassCard } from '@/src/components/glass-card';
 import { PrimaryButton } from '@/src/components/primary-button';
 import { ScreenShell } from '@/src/components/screen-shell';
-import { useTwogetherStore } from '@/src/store/twogether-store';
+import { useLovelockStore } from '@/src/store/lovelock-store';
 
 const RADIUS_OPTIONS = [100, 150, 250, 400];
 
 export default function PlacesScreen() {
   const router = useRouter();
-  const savedPlaces = useTwogetherStore((s) => s.savedPlaces);
-  const currentPlaceId = useTwogetherStore((s) => s.currentPlaceId);
-  const partnerPlaceId = useTwogetherStore((s) => s.partnerPlaceId);
-  const locationPermissionStatus = useTwogetherStore((s) => s.locationPermissionStatus);
-  const locationBusy = useTwogetherStore((s) => s.locationBusy);
-  const locationError = useTwogetherStore((s) => s.locationError);
-  const requestLocationPermission = useTwogetherStore((s) => s.requestLocationPermission);
-  const savePlaceFromCurrentLocation = useTwogetherStore((s) => s.savePlaceFromCurrentLocation);
-  const deleteSavedPlace = useTwogetherStore((s) => s.deleteSavedPlace);
-  const refreshLocationAutomation = useTwogetherStore((s) => s.refreshLocationAutomation);
+  const savedPlaces = useLovelockStore((s) => s.savedPlaces);
+  const currentPlaceId = useLovelockStore((s) => s.currentPlaceId);
+  const partnerPlaceId = useLovelockStore((s) => s.partnerPlaceId);
+  const locationPermissionStatus = useLovelockStore((s) => s.locationPermissionStatus);
+  const locationBusy = useLovelockStore((s) => s.locationBusy);
+  const locationError = useLovelockStore((s) => s.locationError);
+  const requestLocationPermission = useLovelockStore((s) => s.requestLocationPermission);
+  const savePlaceFromCurrentLocation = useLovelockStore((s) => s.savePlaceFromCurrentLocation);
+  const deleteSavedPlace = useLovelockStore((s) => s.deleteSavedPlace);
+  const refreshLocationAutomation = useLovelockStore((s) => s.refreshLocationAutomation);
   const [label, setLabel] = useState('');
   const [radiusMeters, setRadiusMeters] = useState(150);
   const [error, setError] = useState<string | null>(null);
@@ -42,30 +43,33 @@ export default function PlacesScreen() {
   return (
     <ScreenShell
       title="Saved places"
-      subtitle="Save places that matter to both of you, then let Twogether detect when you are there together."
+      subtitle="Save places that matter, then let Love Lock detect when you are there together."
+      showBackButton
       accessory={
-        <Pressable onPress={() => router.back()}>
+        <Pressable onPress={() => router.back()} hitSlop={12}>
           <Text style={styles.done}>Done</Text>
         </Pressable>
       }>
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Current access</Text>
-        <Text style={styles.body}>
-          {locationPermissionStatus === 'granted'
-            ? 'Location access is enabled.'
-            : 'Location access is required to save and check shared places.'}
-        </Text>
-        {locationPermissionStatus !== 'granted' ? (
+      {locationPermissionStatus !== 'granted' ? (
+        <GlassCard style={styles.permissionCard}>
+          <View style={styles.permissionDot} />
+          <View style={styles.permissionCopy}>
+            <Text style={styles.permissionTitle}>Location access needed</Text>
+            <Text style={styles.permissionBody}>
+              Required to save and check shared places.
+            </Text>
+          </View>
           <PrimaryButton
-            label="Allow location access"
+            label="Allow"
+            compact
             onPress={() => {
               void requestLocationPermission();
             }}
           />
-        ) : null}
-      </View>
+        </GlassCard>
+      ) : null}
 
-      <View style={styles.card}>
+      <GlassCard style={styles.addCard}>
         <Text style={styles.sectionTitle}>Add current place</Text>
         <TextInput
           value={label}
@@ -103,66 +107,74 @@ export default function PlacesScreen() {
         />
         {error ? <Text style={styles.error}>{error}</Text> : null}
         {locationError ? <Text style={styles.error}>{locationError}</Text> : null}
+      </GlassCard>
+
+      <View style={styles.listSection}>
+        <Text style={styles.listHeader}>Your places</Text>
+        {savedPlaces.length === 0 ? (
+          <Text style={styles.emptyText}>No places saved yet.</Text>
+        ) : (
+          <View style={styles.placesList}>
+            {savedPlaces.map((place) => (
+              <View key={place.id} style={styles.placeRow}>
+                <View style={styles.placeCopy}>
+                  <Text style={styles.placeLabel}>{place.label}</Text>
+                  <Text style={styles.placeMeta}>{`${place.radiusMeters}m radius`}</Text>
+                  {currentPlaceId === place.id ? (
+                    <View style={styles.presenceBadge}>
+                      <View style={styles.presenceDot} />
+                      <Text style={styles.presenceText}>You are here</Text>
+                    </View>
+                  ) : null}
+                  {partnerPlaceId === place.id ? (
+                    <View style={styles.presenceBadge}>
+                      <View style={styles.presenceDotPartner} />
+                      <Text style={styles.presenceText}>Partner is here</Text>
+                    </View>
+                  ) : null}
+                </View>
+                <Pressable
+                  hitSlop={12}
+                  onPress={() => {
+                    void deleteSavedPlace(place.id);
+                  }}>
+                  <Text style={styles.remove}>Remove</Text>
+                </Pressable>
+              </View>
+            ))}
+          </View>
+        )}
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Saved places</Text>
-        {savedPlaces.length === 0 ? (
-          <Text style={styles.body}>No places saved yet.</Text>
-        ) : (
-          savedPlaces.map((place) => (
-            <View key={place.id} style={styles.placeRow}>
-              <View style={styles.placeCopy}>
-                <Text style={styles.placeLabel}>{place.label}</Text>
-                <Text style={styles.placeMeta}>{`${place.radiusMeters}m radius`}</Text>
-                {currentPlaceId === place.id ? <Text style={styles.status}>You are here</Text> : null}
-                {partnerPlaceId === place.id ? (
-                  <Text style={styles.status}>Your partner is here</Text>
-                ) : null}
-              </View>
-              <Pressable
-                onPress={() => {
-                  void deleteSavedPlace(place.id);
-                }}>
-                <Text style={styles.remove}>Remove</Text>
-              </Pressable>
-            </View>
-          ))
-        )}
-        <PrimaryButton
-          label="Refresh place check-in"
-          secondary
-          loading={locationBusy}
-          onPress={() => {
-            void refreshLocationAutomation();
-          }}
-        />
-      </View>
+      <PrimaryButton
+        label="Refresh check-in"
+        secondary
+        loading={locationBusy}
+        onPress={() => {
+          void refreshLocationAutomation();
+        }}
+      />
     </ScreenShell>
   );
 }
 
 const styles = StyleSheet.create({
-  body: {
-    color: Colors.dark.textSecondary,
-    fontFamily: Fonts.body,
-    fontSize: 15,
-    fontWeight: '400',
-    lineHeight: 22,
-  },
-  card: {
-    backgroundColor: Colors.dark.surface,
-    borderColor: Colors.dark.border,
-    borderRadius: Layout.radiusMd,
-    borderWidth: 1,
-    gap: 14,
-    padding: 16,
+  addCard: {
+    gap: 16,
   },
   done: {
     color: Colors.dark.accent,
-    fontFamily: Fonts.bodyMedium,
-    fontSize: 15,
+    fontFamily: Fonts.rounded,
+    fontSize: 16,
     fontWeight: '600',
+  },
+  emptyText: {
+    color: Colors.dark.textTertiary,
+    fontFamily: Fonts.body,
+    fontSize: 15,
+    fontWeight: '400',
+    paddingVertical: 20,
+    textAlign: 'center',
   },
   error: {
     color: Colors.dark.danger,
@@ -172,7 +184,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   input: {
-    backgroundColor: Colors.dark.background,
+    backgroundColor: Colors.dark.surfaceElevated,
     borderColor: Colors.dark.border,
     borderRadius: Layout.radiusMd,
     borderWidth: 1,
@@ -181,7 +193,46 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     minHeight: 52,
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
+  },
+  listHeader: {
+    color: Colors.dark.textSecondary,
+    fontFamily: Fonts.bodyMedium,
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  listSection: {
+    gap: 12,
+  },
+  permissionBody: {
+    color: Colors.dark.textSecondary,
+    fontFamily: Fonts.body,
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 20,
+  },
+  permissionCard: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 14,
+  },
+  permissionCopy: {
+    flex: 1,
+    gap: 2,
+  },
+  permissionDot: {
+    backgroundColor: Colors.dark.warning,
+    borderRadius: 999,
+    height: 8,
+    width: 8,
+  },
+  permissionTitle: {
+    color: Colors.dark.text,
+    fontFamily: Fonts.bodyMedium,
+    fontSize: 15,
+    fontWeight: '600',
   },
   placeCopy: {
     flex: 1,
@@ -205,18 +256,46 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
     gap: 16,
-    paddingBottom: 12,
+    paddingVertical: 14,
+  },
+  placesList: {
+    gap: 0,
+  },
+  presenceBadge: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 6,
+    marginTop: 2,
+  },
+  presenceDot: {
+    backgroundColor: Colors.dark.success,
+    borderRadius: 999,
+    height: 6,
+    width: 6,
+  },
+  presenceDotPartner: {
+    backgroundColor: Colors.dark.accent,
+    borderRadius: 999,
+    height: 6,
+    width: 6,
+  },
+  presenceText: {
+    color: Colors.dark.success,
+    fontFamily: Fonts.bodyMedium,
+    fontSize: 13,
+    fontWeight: '600',
   },
   radiusChip: {
     borderColor: Colors.dark.border,
     borderRadius: 999,
     borderWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
   },
   radiusChipSelected: {
     backgroundColor: Colors.dark.accent,
     borderColor: Colors.dark.accent,
+    ...Shadows.sm,
   },
   radiusChipText: {
     color: Colors.dark.textSecondary,
@@ -241,14 +320,8 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: Colors.dark.text,
     fontFamily: Fonts.display,
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '700',
-    lineHeight: 28,
-  },
-  status: {
-    color: Colors.dark.success,
-    fontFamily: Fonts.bodyMedium,
-    fontSize: 13,
-    fontWeight: '600',
+    letterSpacing: -0.2,
   },
 });
